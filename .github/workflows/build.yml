@@ -37,10 +37,17 @@ jobs:
           ./gradlew assembleDebug
           ./gradlew bundleRelease
 
-      - name: Upload APK & AAB Artifacts
+      # ----------------------------------------------------
+      # সমাধান: APK এবং AAB আলাদা আলাদা দুটি আর্টফ্যাক্ট হিসেবে আপলোড করা
+      # ----------------------------------------------------
+      - name: Upload APK File
         uses: actions/upload-artifact@v4
         with:
-          name: Swadesh-Seba-Android-Build
-          path: |
-            android/app/build/outputs/apk/debug/app-debug.apk
-            android/app/build/outputs/bundle/release/app-release.aab
+          name: Swadesh-Seba-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload AAB File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Swadesh-Seba-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
