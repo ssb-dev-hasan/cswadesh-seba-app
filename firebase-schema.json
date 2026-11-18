@@ -1,0 +1,18 @@
+{
+  "auth_config": {
+    "welcome_title": "স্বদেশ সেবা",
+    "welcome_subtitle": "নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম",
+    "enable_email_password": true,
+    "enable_signup": true,
+    "enable_google_login": false,
+    "enable_guest_mode": false
+  },
+  "swadesh_profile": {
+    "app_title": "স্বদেশ সেবা",
+    "tagline": "ডিজিটাল নাগরিক সেবা প্ল্যাটফর্ম"
+  },
+  "primary_services": {},
+  "promo_banners": {},
+  "special_modules": {},
+  "unlimited_reviews": {}
+}
