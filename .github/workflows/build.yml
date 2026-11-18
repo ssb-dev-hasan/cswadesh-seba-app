@@ -37,9 +37,6 @@ jobs:
           ./gradlew assembleDebug
           ./gradlew bundleRelease
 
-      # ----------------------------------------------------
-      # সমাধান: APK এবং AAB আলাদা আলাদা দুটি আর্টফ্যাক্ট হিসেবে আপলোড করা
-      # ----------------------------------------------------
       - name: Upload APK File
         uses: actions/upload-artifact@v4
         with:
