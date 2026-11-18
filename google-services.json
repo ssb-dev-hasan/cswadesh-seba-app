@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1088147149423",
+    "firebase_url": "https://swadesh-seba-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "swadesh-seba",
+    "storage_bucket": "swadesh-seba.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088147149423:android:be245cbac92a60bc28f39a",
+        "android_client_info": {
+          "package_name": "com.swadeshseba.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1wFtem2nnpGeXJC71Fl4eY7ud87_yhBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
