@@ -400,16 +400,17 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // এখানে আপনার ফায়ারবেস প্রজেক্টের আসল কনফিগারেশন বসাবেন
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
-        };
-
+    
+const firebaseConfig = {
+  apiKey: "AIzaSyAf7hn4_MIehUUUkg22tluO098ewn7I2Y0",
+  authDomain: "swadesh-seba.firebaseapp.com",
+  databaseURL: "https://swadesh-seba-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "swadesh-seba",
+  storageBucket: "swadesh-seba.firebasestorage.app",
+  messagingSenderId: "1088147149423",
+  appId: "1:1088147149423:web:81cfe70de08f2ea128f39a",
+  measurementId: "G-HG28GRWCSD"
+};
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
