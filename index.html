@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>স্বদেশ সেবা</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-blue-diamond-dark: #040b1d;
+            --bg-blue-diamond-mid: #0a1d47;
+            --bg-blue-diamond-light: #13347a;
+            --card-glass: rgba(16, 42, 99, 0.58);
+            --diamond-border: rgba(56, 189, 248, 0.35);
+            --diamond-glow: rgba(14, 165, 233, 0.45);
+            --accent-diamond: #38bdf8;
+            --text-primary: #ffffff;
+            --text-secondary: #bae6fd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(160deg, var(--bg-blue-diamond-light) 0%, var(--bg-blue-diamond-mid) 40%, var(--bg-blue-diamond-dark) 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .diamond-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--diamond-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 28px rgba(2, 8, 23, 0.6), inset 0 0 14px rgba(56, 189, 248, 0.12);
+        }
+
+        /* ১. স্প্ল্যাশ স্ক্রিন */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #13347a 0%, #040b1d 85%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .splash-logo-box {
+            width: 96px;
+            height: 96px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, #0284c7, #1e3a8a);
+            border: 2px solid var(--accent-diamond);
+            box-shadow: 0 0 35px var(--diamond-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 46px;
+            margin-bottom: 16px;
+            animation: pulseDiamond 1.6s infinite ease-in-out;
+        }
+
+        @keyframes pulseDiamond {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+
+        .splash-loader {
+            width: 140px;
+            height: 4px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .splash-loader-bar {
+            width: 100%;
+            height: 100%;
+            background: var(--accent-diamond);
+            animation: loadProgress 2.2s ease-in-out forwards;
+        }
+
+        @keyframes loadProgress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ২. ফায়ারবেস-কন্ট্রোলড লগইন ইন্টারফেস */
+        #auth-screen {
+            display: none;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 26px 22px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .auth-logo-mini {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 10px;
+            border-radius: 18px;
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid var(--accent-diamond);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: rgba(4, 11, 29, 0.6);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .auth-tab-btn {
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+
+        .auth-tab-btn.active {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #fff;
+        }
+
+        .input-group { margin-bottom: 13px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+
+        .diamond-input {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 11px;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            background: rgba(4, 11, 29, 0.65);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .primary-submit-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0284c7, #1d4ed8);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .social-auth-divider {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin: 14px 0;
+            display: none;
+        }
+
+        .dynamic-auth-btn {
+            width: 100%;
+            padding: 11px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            background: rgba(14, 165, 233, 0.15);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .auth-error-msg {
+            color: #fda4af;
+            font-size: 12px;
+            text-align: center;
+            margin-top: 8px;
+            min-height: 16px;
+        }
+
+        /* ৩. মেইন অ্যাপ ড্যাশবোর্ড */
+        #main-app-screen {
+            display: none;
+            flex: 1;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, rgba(19, 52, 122, 0.85), rgba(6, 17, 43, 0.9));
+        }
+
+        .profile-info { display: flex; align-items: center; gap: 12px; }
+        .profile-avatar {
+            width: 46px; height: 46px; border-radius: 50%;
+            border: 2px solid var(--accent-diamond);
+            background: rgba(14, 165, 233, 0.2);
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+        }
+
+        .section-block { margin-bottom: 22px; }
+        .section-label {
+            font-size: 14px; font-weight: 600; color: var(--text-secondary);
+            margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+        }
+        .section-label::before { content: "❖"; color: var(--accent-diamond); }
+
+        .four-col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+        .grid-card-item {
+            padding: 12px 4px; text-align: center; text-decoration: none; color: #fff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative;
+        }
+        .card-icon-box {
+            font-size: 21px; width: 40px; height: 40px;
+            background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+        }
+        .card-title-text { font-size: 11px; font-weight: 600; line-height: 1.25; }
+        .mini-badge {
+            position: absolute; top: 4px; right: 4px; font-size: 8px;
+            background: #0284c7; padding: 1px 4px; border-radius: 4px; font-weight: 700;
+        }
+        .more-toggle-btn {
+            width: 100%; margin-top: 10px; padding: 9px;
+            background: rgba(14, 165, 233, 0.15); border: 1px dashed rgba(56, 189, 248, 0.45);
+            border-radius: 12px; color: var(--accent-diamond); font-size: 12px; font-weight: 600; cursor: pointer;
+        }
+
+        .banner-wrapper { display: flex; flex-direction: column; gap: 10px; }
+        .banner-card {
+            padding: 18px; background: linear-gradient(135deg, #1d4ed8 0%, #0a1d47 100%);
+            text-decoration: none; color: #fff; display: block;
+        }
+
+        .reviews-list { display: flex; flex-direction: column; gap: 12px; }
+        .review-card { padding: 14px; }
+        .empty-slot {
+            grid-column: 1 / -1; padding: 16px; text-align: center;
+            border: 1px dashed rgba(56, 189, 248, 0.25); border-radius: 12px;
+            color: rgba(186, 230, 253, 0.5); font-size: 12px;
+        }
+
+        /* ৪. কপিরাইট ফুটার */
+        .app-footer-copyright {
+            text-align: center; padding: 16px 12px; font-size: 12px;
+            color: var(--text-secondary); border-top: 1px solid rgba(56, 189, 248, 0.15);
+            background: rgba(4, 11, 29, 0.5); margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- স্প্ল্যাশ স্ক্রিন -->
+    <div id="splash-screen">
+        <div class="splash-logo-box">💎</div>
+        <div style="font-size: 26px; font-weight: 700;">স্বদেশ সেবা</div>
+        <div style="font-size: 12px; color: #bae6fd; margin-top: 4px;">নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম</div>
+        <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+    </div>
+
+    <!-- ফায়ারবেস-কন্ট্রোলড লগইন ও সাইন-আপ ইন্টারফেস -->
+    <div id="auth-screen">
+        <div class="diamond-card auth-box">
+            <div class="auth-header">
+                <div class="auth-logo-mini">💎</div>
+                <h2 style="font-size: 20px; font-weight: 700;" id="auth-ui-title">স্বদেশ সেবা</h2>
+                <p style="font-size: 12px; color: var(--text-secondary);" id="auth-ui-sub">অ্যাকাউন্টে লগইন বা সাইন-আপ করুন</p>
+            </div>
+
+            <div id="email-password-module">
+                <div class="auth-tabs" id="auth-tabs-box">
+                    <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthMode('login')">লগইন</button>
+                    <button class="auth-tab-btn" id="tab-signup" onclick="switchAuthMode('signup')">সাইন আপ</button>
+                </div>
+
+                <form onsubmit="submitAuthForm(event)">
+                    <div class="input-group">
+                        <label>ইমেইল ঠিকানা</label>
+                        <input type="email" id="auth-email" class="diamond-input" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>পাসওয়ার্ড (ন্যূনতম ৬ অক্ষর)</label>
+                        <input type="password" id="auth-password" class="diamond-input" placeholder="••••••••" minlength="6" required>
+                    </div>
+                    <button type="submit" class="primary-submit-btn" id="auth-submit-btn">লগইন করুন</button>
+                </form>
+            </div>
+
+            <div class="social-auth-divider" id="extra-auth-divider">অথবা বিকল্প মাধ্যমে প্রবেশ করুন</div>
+
+            <button class="dynamic-auth-btn" id="btn-google-login" onclick="loginWithGoogle()">
+                <span>🌐</span> গুগল অ্যাকাউন্ট দিয়ে প্রবেশ করুন
+            </button>
+            <button class="dynamic-auth-btn" id="btn-guest-login" onclick="loginAsGuest()">
+                <span>👤</span> অতিথি হিসেবে প্রবেশ করুন (Guest)
+            </button>
+
+            <div class="auth-error-msg" id="auth-error"></div>
+        </div>
+    </div>
+
+    <!-- মেইন অ্যাপ ড্যাশবোর্ড -->
+    <main id="main-app-screen">
+        <header class="diamond-card profile-header">
+            <div class="profile-info">
+                <div class="profile-avatar">👤</div>
+                <div>
+                    <div style="font-size: 16px; font-weight: 700;" id="prof-title">স্বদেশ সেবা</div>
+                    <div style="font-size: 11px; color: var(--text-secondary);" id="prof-email">user@email.com</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logoutUser()">লগআউট</button>
+        </header>
+
+        <div class="section-block">
+            <div class="section-label">প্রধান সেবাসমূহ</div>
+            <section class="four-col-grid" id="primary_services"><div class="empty-slot">ফায়ারবেস ডাটাবেজের অপেক্ষায়...</div></section>
+            <div id="primary_services_more"></div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-label">বিশেষ ঘোষণা ও ব্যানার</div>
+            <section class="banner-wrapper" id="promo_banners"><div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div></section>
+        </div>
+
+        <div class="section-block">
+            <div class="section-label">বিশেষ মডিউল</div>
+            <section class="four-col-grid" id="special_modules"><div class="empty-slot">ফায়ারবেস ডাটাবেজের অপেক্ষায়...</div></section>
+            <div id="special_modules_more"></div>
+        </div>
+
+        <div class="section-block">
+            <div class="section-label">নাগরিক মতামত ও রিভিউ</div>
+            <section class="reviews-list" id="unlimited_reviews"><div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div></section>
+        </div>
+    </main>
+
+    <!-- ফুটার কপিরাইট -->
+    <footer class="app-footer-copyright">
+        &copy; ২০২৬ <strong>স্বদেশ সেবা</strong> • সর্বস্বত্ব সংরক্ষিত
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // এখানে আপনার ফায়ারবেস প্রজেক্টের আসল কনফিগারেশন বসাবেন
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        let authMode = 'login';
+        let splashFinished = false;
+        let currentUserState = null;
+
+        setTimeout(() => {
+            splashFinished = true;
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                routeScreen();
+            }, 500);
+        }, 2200);
+
+        function routeScreen() {
+            if (!splashFinished) return;
+            const authScreen = document.getElementById('auth-screen');
+            const mainScreen = document.getElementById('main-app-screen');
+
+            if (currentUserState) {
+                authScreen.style.display = 'none';
+                mainScreen.style.display = 'block';
+                document.getElementById('prof-email').innerText = currentUserState.isAnonymous ? "অতিথি ব্যবহারকারী (Guest)" : currentUserState.email;
+            } else {
+                mainScreen.style.display = 'none';
+                authScreen.style.display = 'flex';
+            }
+        }
+
+        // ফায়ারবেস থেকে লগইন ইন্টারফেস কন্ট্রোল (auth_config)
+        onValue(ref(db, 'auth_config'), (snap) => {
+            const cfg = snap.val();
+            if (!cfg) return;
+
+            if (cfg.welcome_title) document.getElementById('auth-ui-title').innerText = cfg.welcome_title;
+            if (cfg.welcome_subtitle) document.getElementById('auth-ui-sub').innerText = cfg.welcome_subtitle;
+
+            const emailModule = document.getElementById('email-password-module');
+            emailModule.style.display = (cfg.enable_email_password === false) ? 'none' : 'block';
+
+            const signupTab = document.getElementById('tab-signup');
+            if (cfg.enable_signup === false) {
+                signupTab.style.display = 'none';
+                document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr';
+            } else {
+                signupTab.style.display = 'block';
+                document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr 1fr';
+            }
+
+            const googleBtn = document.getElementById('btn-google-login');
+            const guestBtn = document.getElementById('btn-guest-login');
+            const divider = document.getElementById('extra-auth-divider');
+
+            googleBtn.style.display = cfg.enable_google_login ? 'flex' : 'none';
+            guestBtn.style.display = cfg.enable_guest_login ? 'flex' : 'none';
+            divider.style.display = (cfg.enable_google_login || cfg.enable_guest_login) ? 'block' : 'none';
+        });
+
+        window.switchAuthMode = (mode) => {
+            authMode = mode;
+            document.getElementById('auth-error').innerText = '';
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
+            document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'লগইন করুন' : 'নতুন অ্যাকাউন্ট তৈরি করুন';
+        };
+
+        window.submitAuthForm = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const errorBox = document.getElementById('auth-error');
+            errorBox.innerText = 'যাচাই করা হচ্ছে...';
+
+            if (authMode === 'signup') {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .catch(err => errorBox.innerText = "সাইন-আপ ত্রুটি: " + err.message);
+            } else {
+                signInWithEmailAndPassword(auth, email, password)
+                    .catch(() => errorBox.innerText = "ইমেইল বা পাসওয়ার্ড সঠিক নয়!");
+            }
+        };
+
+        window.loginWithGoogle = () => {
+            signInWithPopup(auth, new GoogleAuthProvider())
+                .catch(err => document.getElementById('auth-error').innerText = err.message);
+        };
+
+        window.loginAsGuest = () => {
+            signInAnonymously(auth)
+                .catch(err => document.getElementById('auth-error').innerText = err.message);
+        };
+
+        window.logoutUser = () => signOut(auth);
+
+        onAuthStateChanged(auth, (user) => {
+            currentUserState = user;
+            routeScreen();
+        });
+
+        // ৪ কলাম × ৩ লাইন + মোর বাটন ইঞ্জিন
+        const MAX_VISIBLE_CARDS = 12;
+        const expandedState = { primary_services: false, special_modules: false };
+        const cachedSectionData = { primary_services: [], special_modules: [] };
+
+        function renderFourColSection(sectionId, showBadge = false) {
+            const container = document.getElementById(sectionId);
+            const moreContainer = document.getElementById(`${sectionId}_more`);
+            const items = cachedSectionData[sectionId];
+            const isExpanded = expandedState[sectionId];
+
+            container.innerHTML = '';
+            moreContainer.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                container.innerHTML = `<div class="empty-slot">ফায়ারবেস থেকে কার্ড যুক্ত করুন</div>`;
+                return;
+            }
+
+            const visibleItems = isExpanded ? items : items.slice(0, MAX_VISIBLE_CARDS);
+            visibleItems.forEach(item => {
+                const badgeHtml = (showBadge && item.badge) ? `<span class="mini-badge">${item.badge}</span>` : '';
+                container.innerHTML += `
+                    <a href="${item.link || '#'}" class="diamond-card grid-card-item">
+                        ${badgeHtml}
+                        <div class="card-icon-box">${item.icon || '💠'}</div>
+                        <div class="card-title-text">${item.title}</div>
+                    </a>`;
+            });
+
+            if (items.length > MAX_VISIBLE_CARDS) {
+                const hiddenCount = items.length - MAX_VISIBLE_CARDS;
+                moreContainer.innerHTML = `
+                    <button class="more-toggle-btn" onclick="toggleSectionMore('${sectionId}', ${showBadge})">
+                        ${isExpanded ? 'সংক্ষিপ্ত করুন ▲' : `আরও দেখুন (+${hiddenCount}টি) ▼`}
+                    </button>`;
+            }
+        }
+
+        window.toggleSectionMore = (sectionId, showBadge) => {
+            expandedState[sectionId] = !expandedState[sectionId];
+            renderFourColSection(sectionId, showBadge);
+        };
+
+        onValue(ref(db, 'primary_services'), (snap) => {
+            const data = snap.val();
+            cachedSectionData.primary_services = data ? Object.values(data).filter(i => i.active !== false) : [];
+            renderFourColSection('primary_services', false);
+        });
+
+        onValue(ref(db, 'promo_banners'), (snap) => {
+            const container = document.getElementById('promo_banners');
+            const data = snap.val();
+            if (!data) { container.innerHTML = `<div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div>`; return; }
+            container.innerHTML = '';
+            Object.values(data).forEach(bnr => {
+                container.innerHTML += `
+                    <a href="${bnr.link || '#'}" class="diamond-card banner-card">
+                        <div style="font-size:17px; font-weight:700; color:#7dd3fc; margin-bottom:4px;">${bnr.title}</div>
+                        <div style="font-size:13px; color:#e0f2fe;">${bnr.desc}</div>
+                    </a>`;
+            });
+        });
+
+        onValue(ref(db, 'special_modules'), (snap) => {
+            const data = snap.val();
+            cachedSectionData.special_modules = data ? Object.values(data).filter(i => i.active !== false) : [];
+            renderFourColSection('special_modules', true);
+        });
+
+        onValue(ref(db, 'unlimited_reviews'), (snap) => {
+            const container = document.getElementById('unlimited_reviews');
+            const data = snap.val();
+            if (!data) { container.innerHTML = `<div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div>`; return; }
+            container.innerHTML = '';
+            Object.values(data).reverse().forEach(rev => {
+                container.innerHTML += `
+                    <div class="diamond-card review-card">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
+                            <span style="font-weight:700; color:var(--accent-diamond);">${rev.user} &nbsp; ${rev.rating || ''}</span>
+                            <span style="color:var(--text-secondary); font-size:11px;">${rev.date || ''}</span>
+                        </div>
+                        <div style="font-size:13px; color:#f1f5f9; line-height:1.5;">${rev.comment}</div>
+                    </div>`;
+            });
+        });
+    </script>
+</body>
+</html>
