@@ -1,0 +1,8 @@
+{
+  "appId": "com.swadeshseba.app",
+  "appName": "স্বদেশ সেবা",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
