@@ -418,6 +418,25 @@
         let splashFinished = false;
         let currentUserState = null;
 
+        // পুশ নোটিফিকেশন ইঞ্জিন ইনিশিয়ালাইজেশন
+        function initNativePushNotifications() {
+            if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
+                const { PushNotifications } = window.Capacitor.Plugins;
+                PushNotifications.requestPermissions().then(result => {
+                    if (result.receive === 'granted') {
+                        PushNotifications.register();
+                    }
+                });
+                PushNotifications.addListener('registration', (token) => {
+                    console.log('FCM Token: ' + token.value);
+                });
+                PushNotifications.addListener('pushNotificationReceived', (notification) => {
+                    alert(`${notification.title}\n${notification.body}`);
+                });
+            }
+        }
+        window.addEventListener('DOMContentLoaded', initNativePushNotifications);
+
         setTimeout(() => {
             splashFinished = true;
             const splash = document.getElementById('splash-screen');
