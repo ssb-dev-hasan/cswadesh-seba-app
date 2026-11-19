@@ -236,7 +236,7 @@
             background-color: var(--bg-white);
         }
 
-        /* একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার (বামে প্রোফাইল ছবি, ডানে ওয়েলকাম টেক্সট ও ভেরিফাইড টিক; নিচে দ্বিতীয় বক্স বা লগআউট নেই) */
+        /* একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার */
         .welcome-top-banner {
             display: flex;
             align-items: center;
@@ -329,7 +329,7 @@
             padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
         }
 
-        /* আলাদা ট্যাব/স্ক্রিন পেজ (সার্চ, প্রোফাইল/মি, সেটিং গিয়ার বক্স - ওপেন হলে হোমপেজের কোনো কিছু দেখাবে না) */
+        /* আলাদা ট্যাব/স্ক্রিন পেজ */
         .standalone-page-view {
             display: none;
             flex: 1;
@@ -650,7 +650,7 @@
             background: var(--surface-light);
         }
 
-        /* নিচের বটম নেভিগেশন আইকন বার (হোম, সার্চ বক্স, প্রোফাইল মি, সেটিং গিয়ার বক্স) */
+        /* নিচের বটম নেভিগেশন আইকন বার */
         #bottom-nav-bar {
             display: none;
             position: fixed;
@@ -794,7 +794,7 @@
 
     <!-- মেইন অ্যাপ ড্যাশবোর্ড (হোম পেজ) -->
     <main id="main-app-screen">
-        <!-- একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার: বামে প্রোফাইল আইকন/ছবি, ডানে ওয়েলকাম টেক্সট -->
+        <!-- একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার -->
         <div class="welcome-top-banner" id="firebase-style-welcome">
             <button type="button" class="header-profile-avatar-btn" id="header-profile-avatar-btn" onclick="openProfileTabFromHeader()" title="প্রোফাইল">
                 <span id="header-avatar-fallback">👤</span>
@@ -848,7 +848,7 @@
         </div>
     </section>
 
-    <!-- আলাদা প্রোফাইল / মি (Me) পেজ: এডিট প্রোফাইল (নাম পরিবর্তন করা যাবে না, জন্ম তারিখ ও লিঙ্গ সিলেক্ট করা যাবে) ও লগআউট -->
+    <!-- আলাদা প্রোফাইল / মি (Me) পেজ -->
     <section class="standalone-page-view" id="me-profile-page-view">
         <div class="congrats-banner-box" id="congrats-greeting-banner">
             স্বদেশ সেবার পক্ষ থেকে অভিনন্দন
@@ -1031,6 +1031,11 @@
         let activeBottomTab = 'home';
         let exitDialogOpen = false;
 
+        // ধাপে ধাপে (একটি একটি করে) ব্যাক হওয়ার জন্য নেভিগেশন স্ট্যাক
+        // প্রতিটি এন্ট্রি: { type: 'tab', tab: 'home'|'search'|'me'|'settings' } বা { type: 'module', title, url }
+        let pageBackStack = [{ type: 'tab', tab: 'home' }];
+        let isHandlingBackStep = false;
+
         // সেটিংস ও ইউজার প্রোফাইল স্টেট
         let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
         let currentLang = localStorage.getItem('swadesh_lang') || 'bn';
@@ -1109,6 +1114,84 @@
                 notSet: 'Not set'
             }
         };
+
+        function pushHistoryStep(label) {
+            try {
+                window.history.pushState({ swadeshStep: label, depth: pageBackStack.length }, '', window.location.href);
+            } catch (_) {}
+        }
+
+        function applyTabViewOnly(tabName) {
+            activeBottomTab = tabName || 'home';
+            isModuleFullscreenActive = false;
+
+            const overlay = document.getElementById('fullscreen-module-overlay');
+            const iframe = document.getElementById('fullscreen-module-iframe');
+            if (iframe && iframe.src !== 'about:blank') iframe.src = 'about:blank';
+            if (overlay) overlay.style.display = 'none';
+
+            const bottomNav = document.getElementById('bottom-nav-bar');
+            if (bottomNav && (currentUserState || localStorage.getItem('swadesh_saved_email'))) {
+                bottomNav.style.display = 'flex';
+            }
+
+            const homeScreen = document.getElementById('main-app-screen');
+            const searchView = document.getElementById('search-page-view');
+            const meView = document.getElementById('me-profile-page-view');
+            const settingsView = document.getElementById('settings-page-view');
+            const footer = document.getElementById('app-footer');
+
+            homeScreen.style.display = activeBottomTab === 'home' ? 'block' : 'none';
+            searchView.style.display = activeBottomTab === 'search' ? 'block' : 'none';
+            meView.style.display = activeBottomTab === 'me' ? 'block' : 'none';
+            settingsView.style.display = activeBottomTab === 'settings' ? 'block' : 'none';
+            if (footer) footer.style.display = activeBottomTab === 'home' ? 'block' : 'none';
+
+            document.getElementById('nav-btn-home').classList.toggle('active', activeBottomTab === 'home');
+            document.getElementById('nav-btn-search').classList.toggle('active', activeBottomTab === 'search');
+            document.getElementById('nav-btn-me').classList.toggle('active', activeBottomTab === 'me');
+            document.getElementById('nav-btn-settings').classList.toggle('active', activeBottomTab === 'settings');
+
+            const editFb = document.getElementById('edit-profile-feedback');
+            if (editFb) editFb.innerText = '';
+            syncProfileUI();
+            if (activeBottomTab === 'search') {
+                renderSearchResults();
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function applyModuleViewOnly(url) {
+            isModuleFullscreenActive = true;
+            document.getElementById('main-app-screen').style.display = 'none';
+            document.getElementById('search-page-view').style.display = 'none';
+            document.getElementById('me-profile-page-view').style.display = 'none';
+            document.getElementById('settings-page-view').style.display = 'none';
+            const bottomNav = document.getElementById('bottom-nav-bar');
+            const footer = document.getElementById('app-footer');
+            if (bottomNav) bottomNav.style.display = 'none';
+            if (footer) footer.style.display = 'none';
+
+            const overlay = document.getElementById('fullscreen-module-overlay');
+            const iframe = document.getElementById('fullscreen-module-iframe');
+            overlay.style.display = 'block';
+            if (url && iframe.src !== url) {
+                iframe.src = url;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function renderTopOfStack() {
+            if (!pageBackStack.length) {
+                pageBackStack = [{ type: 'tab', tab: 'home' }];
+            }
+            const top = pageBackStack[pageBackStack.length - 1];
+            if (top.type === 'module') {
+                applyModuleViewOnly(top.url);
+            } else {
+                applyTabViewOnly(top.tab);
+            }
+        }
 
         window.setAppTheme = (mode) => {
             currentTheme = mode === 'dark' ? 'dark' : 'light';
@@ -1276,32 +1359,18 @@
 
         window.switchBottomTab = (tabName) => {
             if (!currentUserState && !localStorage.getItem('swadesh_saved_email')) return;
-            activeBottomTab = tabName || 'home';
+            const targetTab = tabName || 'home';
+            const currentTop = pageBackStack[pageBackStack.length - 1];
 
-            const homeScreen = document.getElementById('main-app-screen');
-            const searchView = document.getElementById('search-page-view');
-            const meView = document.getElementById('me-profile-page-view');
-            const settingsView = document.getElementById('settings-page-view');
-            const footer = document.getElementById('app-footer');
-
-            homeScreen.style.display = activeBottomTab === 'home' ? 'block' : 'none';
-            searchView.style.display = activeBottomTab === 'search' ? 'block' : 'none';
-            meView.style.display = activeBottomTab === 'me' ? 'block' : 'none';
-            settingsView.style.display = activeBottomTab === 'settings' ? 'block' : 'none';
-            if (footer) footer.style.display = activeBottomTab === 'home' ? 'block' : 'none';
-
-            document.getElementById('nav-btn-home').classList.toggle('active', activeBottomTab === 'home');
-            document.getElementById('nav-btn-search').classList.toggle('active', activeBottomTab === 'search');
-            document.getElementById('nav-btn-me').classList.toggle('active', activeBottomTab === 'me');
-            document.getElementById('nav-btn-settings').classList.toggle('active', activeBottomTab === 'settings');
-
-            const editFb = document.getElementById('edit-profile-feedback');
-            if (editFb) editFb.innerText = '';
-            syncProfileUI();
-            if (activeBottomTab === 'search') {
-                renderSearchResults();
+            if (!currentTop || currentTop.type !== 'tab' || currentTop.tab !== targetTab) {
+                if (targetTab === 'home') {
+                    pageBackStack = [{ type: 'tab', tab: 'home' }];
+                } else {
+                    pageBackStack.push({ type: 'tab', tab: targetTab });
+                }
+                pushHistoryStep('tab:' + targetTab);
             }
-            window.scrollTo(0, 0);
+            renderTopOfStack();
         };
 
         function applySavedPreferences() {
@@ -1310,34 +1379,6 @@
             syncProfileUI();
         }
         window.addEventListener('DOMContentLoaded', applySavedPreferences);
-
-        function setDashboardVisibility(showDashboard) {
-            const bottomNav = document.getElementById('bottom-nav-bar');
-            const footer = document.getElementById('app-footer');
-            if (!currentUserState && !localStorage.getItem('swadesh_saved_email')) {
-                if (bottomNav) bottomNav.style.display = 'none';
-                return;
-            }
-
-            if (showDashboard) {
-                if (bottomNav) bottomNav.style.display = 'flex';
-                window.switchBottomTab(activeBottomTab);
-            } else {
-                document.getElementById('main-app-screen').style.display = 'none';
-                document.getElementById('search-page-view').style.display = 'none';
-                document.getElementById('me-profile-page-view').style.display = 'none';
-                document.getElementById('settings-page-view').style.display = 'none';
-                if (bottomNav) bottomNav.style.display = 'none';
-                if (footer) footer.style.display = 'none';
-            }
-        }
-
-        // হোম হিস্ট্রি এন্ট্রি পুশ করা যাতে ফোনের ব্যাক বাটনে অ্যাপ থেকে বের হয়ে না যায়
-        function ensureHomeHistoryState() {
-            try {
-                window.history.pushState({ swadeshHomeGuard: true, ts: Date.now() }, '', window.location.href);
-            } catch (_) {}
-        }
 
         function setExitDialogVisible(open) {
             exitDialogOpen = Boolean(open);
@@ -1349,7 +1390,6 @@
 
         window.confirmExitApp = (shouldExit) => {
             setExitDialogVisible(false);
-            ensureHomeHistoryState();
             if (shouldExit) {
                 try {
                     if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.exitApp === 'function') {
@@ -1360,62 +1400,67 @@
                 try {
                     window.close();
                 } catch (_) {}
+            } else {
+                pushHistoryStep('stay_home');
             }
         };
 
-        // মডিউলে ক্লিক করলে সরাসরি অ্যাপ কন্টেইনারের ভেতরে পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে
+        // মডিউলে ক্লিক করলে অ্যাপ কন্টেইনারের ভেতরে পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে
         window.openServiceStep = (title, url) => {
             if (!url || url === '#') return;
             setExitDialogVisible(false);
-            const overlay = document.getElementById('fullscreen-module-overlay');
-            const iframe = document.getElementById('fullscreen-module-iframe');
-
-            isModuleFullscreenActive = true;
-            setDashboardVisibility(false);
-            overlay.style.display = 'block';
-            iframe.src = url;
-            window.scrollTo(0, 0);
-            ensureHomeHistoryState();
+            pageBackStack.push({ type: 'module', title: title || '', url });
+            pushHistoryStep('module');
+            renderTopOfStack();
         };
 
-        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আবার মূল হোম পেজ দেখাবে
+        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আগের পেজ/হোম পেজে নিয়ে যাবে
         window.closeServiceViewer = () => {
-            const overlay = document.getElementById('fullscreen-module-overlay');
-            const iframe = document.getElementById('fullscreen-module-iframe');
-
-            isModuleFullscreenActive = false;
-            iframe.src = 'about:blank';
-            overlay.style.display = 'none';
-            activeBottomTab = 'home';
-            setDashboardVisibility(true);
-            window.scrollTo(0, 0);
-            ensureHomeHistoryState();
+            if (pageBackStack.length > 1) {
+                pageBackStack.pop();
+            } else {
+                pageBackStack = [{ type: 'tab', tab: 'home' }];
+            }
+            renderTopOfStack();
         };
 
-        // ফোনের হার্ডওয়্যার / ব্রাউজার ব্যাক বাটন হ্যান্ডলিং:
-        // মডিউল বা অন্য ট্যাবে থাকলে মূল হোম পেজে নিয়ে আসবে; হোম পেজে থাকলে "আপনি কি অ্যাপ থেকে বের হতে চান? হ্যাঁ বা না" দেখাবে
+        // ফোনের ব্যাক বাটন হ্যান্ডলিং: একটি একটি করে পেজ ব্যাকে আসবে; সবশেষে হোম পেজে এলে এক্সিট ডায়ালগ দেখাবে
         function handlePhoneBackAction() {
-            if (exitDialogOpen) {
-                setExitDialogVisible(false);
-                ensureHomeHistoryState();
+            if (isHandlingBackStep) return true;
+            isHandlingBackStep = true;
+
+            try {
+                if (exitDialogOpen) {
+                    setExitDialogVisible(false);
+                    pushHistoryStep('home_guard');
+                    return true;
+                }
+
+                if (pageBackStack.length > 1) {
+                    pageBackStack.pop();
+                    renderTopOfStack();
+                    pushHistoryStep('step_back');
+                    return true;
+                }
+
+                // ইতিমধ্যে হোম পেজে থাকলে অ্যাপ সরাসরি বন্ধ না করে হ্যাঁ/না কনফার্মেশন দেখাবে
+                applyTabViewOnly('home');
+                setExitDialogVisible(true);
+                pushHistoryStep('home_guard');
                 return true;
+            } finally {
+                setTimeout(() => {
+                    isHandlingBackStep = false;
+                }, 60);
             }
-            if (isModuleFullscreenActive) {
-                window.closeServiceViewer();
-                return true;
-            }
-            if (activeBottomTab !== 'home') {
-                window.switchBottomTab('home');
-                ensureHomeHistoryState();
-                return true;
-            }
-            setExitDialogVisible(true);
-            ensureHomeHistoryState();
-            return true;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            ensureHomeHistoryState();
+            try {
+                window.history.replaceState({ swadeshRoot: true }, '', window.location.href);
+                pushHistoryStep('home_guard');
+            } catch (_) {}
+
             try {
                 if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.addListener === 'function') {
                     window.Capacitor.Plugins.App.addListener('backButton', () => {
@@ -1429,7 +1474,7 @@
             handlePhoneBackAction();
         });
 
-        // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে হোমে ফেরার সিগন্যাল গ্রহণ
+        // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে ফেরার সিগন্যাল গ্রহণ
         window.addEventListener('message', (event) => {
             const data = event && event.data;
             if (data === 'CLOSE_MODULE' || data === 'BACK_TO_HOME' || (data && (data.action === 'closeModule' || data.action === 'backToHome'))) {
@@ -1437,26 +1482,20 @@
             }
         });
 
-        // মডিউলের iframe লোড/নেভিগেশন পর্যবেক্ষণ করে কন্টেইনারের ভেতরেই রাখা ও হোমে ফেরার লিংক হলে ওভারলে বন্ধ করা
+        // মডিউলের iframe লোড/নেভিগেশন পর্যবেক্ষণ
         const moduleIframeEl = document.getElementById('fullscreen-module-iframe');
         if (moduleIframeEl) {
             moduleIframeEl.addEventListener('load', () => {
                 try {
                     const currentHref = moduleIframeEl.contentWindow && moduleIframeEl.contentWindow.location ? moduleIframeEl.contentWindow.location.href : '';
-                    if (!currentHref || currentHref === 'about:blank') {
-                        if (isModuleFullscreenActive) {
-                            isModuleFullscreenActive = false;
-                            document.getElementById('fullscreen-module-overlay').style.display = 'none';
-                            setDashboardVisibility(true);
-                        }
-                    } else if (currentHref.includes('#home') || currentHref.includes('back=home') || currentHref.includes('dashboard=true')) {
+                    if (currentHref && (currentHref.includes('#home') || currentHref.includes('back=home') || currentHref.includes('dashboard=true'))) {
                         window.closeServiceViewer();
                     }
                 } catch (_) {}
             });
         }
 
-        // নোটিফিকেশন পারমিশন প্রম্পটে অ্যাপ ক্র্যাশ/বন্ধ হওয়া প্রতিরোধে নিরাপদ হ্যান্ডলিং
+        // নোটিফিকেশন পারমিশন প্রম্পটে নিরাপদ হ্যান্ডলিং
         function initNativePushNotifications() {
             try {
                 if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
@@ -1532,7 +1571,6 @@
                 }
                 syncProfileUI();
 
-                // রেজিস্টার/লগইন করা জিমেইল/ইমেইল প্রোফাইল (মি) পেজে যুক্ত হবে; হোমপেজের হেডারে থাকবে না
                 const meEmailEl = document.getElementById('me-page-email');
                 if (meEmailEl) meEmailEl.innerText = displayEmail;
 
@@ -1541,7 +1579,6 @@
                     Boolean(savedEmail)
                 );
 
-                // রেজিস্টার/লগইন করার পর নামের পাশে ব্লু ভেরিফাইড টিক
                 if (isEmailProvider) {
                     if (meVerifiedBadge) meVerifiedBadge.classList.add('active');
                     if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.add('active');
@@ -1550,10 +1587,8 @@
                     if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.remove('active');
                 }
 
-                if (!isModuleFullscreenActive) {
-                    if (bottomNav) bottomNav.style.display = 'flex';
-                    window.switchBottomTab(activeBottomTab);
-                }
+                if (bottomNav) bottomNav.style.display = 'flex';
+                renderTopOfStack();
             } else {
                 document.getElementById('main-app-screen').style.display = 'none';
                 document.getElementById('search-page-view').style.display = 'none';
@@ -1699,9 +1734,14 @@
 
         window.logoutUser = () => {
             localStorage.removeItem('swadesh_saved_email');
+            pageBackStack = [{ type: 'tab', tab: 'home' }];
             activeBottomTab = 'home';
+            isModuleFullscreenActive = false;
             setExitDialogVisible(false);
-            window.closeServiceViewer();
+            const iframe = document.getElementById('fullscreen-module-iframe');
+            const overlay = document.getElementById('fullscreen-module-overlay');
+            if (iframe) iframe.src = 'about:blank';
+            if (overlay) overlay.style.display = 'none';
             signOut(auth);
         };
 
