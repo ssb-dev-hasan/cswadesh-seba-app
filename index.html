@@ -226,18 +226,52 @@
             background-color: var(--bg-white);
         }
 
+        /* ফায়ারবেজ-স্টাইল ওয়েলকাম হেডার (হোমপেজের হেডারে ইমেইল দেখানো হবে না) */
+        .welcome-top-banner {
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+        }
+
+        .welcome-greeting-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .welcome-hello-text {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-dark);
+        }
+
+        .welcome-hello-name {
+            color: #eab308;
+        }
+
+        .welcome-sub-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 600;
+        }
+
         .profile-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 16px;
+            padding: 12px 16px;
             margin-bottom: 18px;
             gap: 8px;
         }
 
         .profile-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
         .profile-avatar {
-            width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
             border: 1.5px solid #cbd5e1;
             background: var(--bg-white);
             display: flex; align-items: center; justify-content: center; font-size: 20px;
@@ -426,7 +460,7 @@
             color: var(--text-dark);
         }
 
-        /* ফুল-স্ক্রিন মডিউল ওভারলে */
+        /* অ্যাপ কন্টেইনার নিয়ন্ত্রিত ফুল-স্ক্রিন মডিউল ওভারলে */
         #fullscreen-module-overlay {
             display: none;
             position: fixed;
@@ -435,6 +469,7 @@
             height: 100vh;
             z-index: 9998;
             background: var(--bg-white);
+            overflow: hidden;
         }
 
         .fullscreen-module-iframe {
@@ -443,6 +478,60 @@
             border: none;
             display: block;
             background: var(--bg-white);
+        }
+
+        /* হোমপেজে ব্যাক বাটন চাপলে "আপনি কি অ্যাপ থেকে বের হতে চান? হ্যাঁ বা না" ডায়ালগ */
+        #exit-confirm-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .exit-confirm-box {
+            width: 100%;
+            max-width: 340px;
+            padding: 20px 18px;
+            text-align: center;
+        }
+
+        .exit-confirm-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .exit-confirm-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .exit-yes-btn {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #dc2626;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .exit-no-btn {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .section-block { margin-bottom: 22px; }
@@ -590,6 +679,10 @@
 
                 <form onsubmit="submitAuthForm(event)">
                     <div class="input-group">
+                        <label id="auth-name-label">আপনার নাম</label>
+                        <input type="text" id="auth-fullname" class="clean-input" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+                    </div>
+                    <div class="input-group">
                         <label>ইমেইল ঠিকানা</label>
                         <input type="email" id="auth-email" class="clean-input" placeholder="example@mail.com" required>
                     </div>
@@ -616,6 +709,18 @@
 
     <!-- মেইন অ্যাপ ড্যাশবোর্ড (হোম পেজ) -->
     <main id="main-app-screen">
+        <!-- ফায়ারবেজের মতো ওয়েলকাম ব্যানার (হোমপেজের হেডারে ইমেইল থাকবে না) -->
+        <div class="welcome-top-banner" id="firebase-style-welcome">
+            <div class="welcome-greeting-line">
+                <div class="welcome-hello-text">
+                    <span id="welcome-prefix-label">Hello,</span>
+                    <span class="welcome-hello-name" id="welcome-user-name">স্বদেশ সেবা</span>
+                </div>
+                <span class="verified-badge" id="welcome-verified-badge" title="Verified">✓</span>
+            </div>
+            <div class="welcome-sub-text" id="welcome-back-sub">Welcome back to Swadesh Seba!</div>
+        </div>
+
         <header class="clean-surface profile-header">
             <div class="profile-info">
                 <div class="profile-avatar">👤</div>
@@ -624,7 +729,6 @@
                         <span id="prof-title">স্বদেশ সেবা</span>
                         <span class="verified-badge" id="email-verified-badge" title="Verified">✓</span>
                     </div>
-                    <div style="font-size: 11px; color: var(--text-muted);" id="prof-email">user@email.com</div>
                 </div>
             </div>
             <div class="header-actions">
@@ -668,7 +772,7 @@
         </div>
     </section>
 
-    <!-- আলাদা প্রোফাইল / মি (Me) পেজ -->
+    <!-- আলাদা প্রোফাইল / মি (Me) পেজ (রেজিস্টার/লগইন করা জিমেইল/ইমেইল এখানে যুক্ত ও প্রদর্শিত হবে) -->
     <section class="standalone-page-view" id="me-profile-page-view">
         <div class="congrats-banner-box" id="congrats-greeting-banner">
             স্বদেশ সেবার পক্ষ থেকে অভিনন্দন
@@ -751,9 +855,20 @@
         &copy; ২০২৬ <strong>স্বদেশ সেবা</strong> • সর্বস্বত্ব সংরক্ষিত
     </footer>
 
-    <!-- ফুল-স্ক্রিন মডিউল কন্টেইনার (মডিউলে ক্লিক করলে শুধু সেই মডিউল পুরো স্ক্রিনে দেখাবে) -->
+    <!-- অ্যাপ কন্টেইনার নিয়ন্ত্রিত ফুল-স্ক্রিন মডিউল ওভারলে -->
     <div id="fullscreen-module-overlay">
-        <iframe id="fullscreen-module-iframe" class="fullscreen-module-iframe" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation-by-user-activation"></iframe>
+        <iframe id="fullscreen-module-iframe" class="fullscreen-module-iframe" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+    </div>
+
+    <!-- হোমপেজে ব্যাক বাটন চাপলে এক্সিট কনফার্মেশন বক্স -->
+    <div id="exit-confirm-modal" role="dialog" aria-modal="true">
+        <div class="clean-surface exit-confirm-box">
+            <div class="exit-confirm-title" id="exit-confirm-question">আপনি কি অ্যাপ থেকে বের হতে চান?</div>
+            <div class="exit-confirm-actions">
+                <button type="button" class="exit-yes-btn" id="exit-yes-btn" onclick="confirmExitApp(true)">হ্যাঁ</button>
+                <button type="button" class="exit-no-btn" id="exit-no-btn" onclick="confirmExitApp(false)">না</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -796,11 +911,13 @@
         let currentUserState = null;
         let isModuleFullscreenActive = false;
         let activeBottomTab = 'home';
+        let exitDialogOpen = false;
 
-        // সেটিংস স্টেট (ডার্ক/লাইট মোড, ভাষা, প্রোফাইল নাম)
+        // সেটিংস ও ইউজার প্রোফাইল স্টেট
         let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
         let currentLang = localStorage.getItem('swadesh_lang') || 'bn';
         let savedProfileTitle = localStorage.getItem('swadesh_profile_title') || 'স্বদেশ সেবা';
+        let savedUserName = localStorage.getItem('swadesh_user_name') || '';
 
         const uiTexts = {
             bn: {
@@ -824,7 +941,12 @@
                 searchTitle: 'সার্চ বক্স',
                 searchPlaceholder: 'সার্ভিস বা মডিউল খুঁজুন...',
                 congratsText: 'স্বদেশ সেবার পক্ষ থেকে অভিনন্দন',
-                accountStatus: 'অ্যাকাউন্ট স্ট্যাটাস'
+                accountStatus: 'অ্যাকাউন্ট স্ট্যাটাস',
+                welcomePrefix: 'Hello,',
+                welcomeSub: 'Welcome back to Swadesh Seba!',
+                exitQuestion: 'আপনি কি অ্যাপ থেকে বের হতে চান?',
+                exitYes: 'হ্যাঁ',
+                exitNo: 'না'
             },
             en: {
                 logout: 'Logout',
@@ -847,7 +969,12 @@
                 searchTitle: 'Search Box',
                 searchPlaceholder: 'Search service or module...',
                 congratsText: 'Congratulations from Swadesh Seba',
-                accountStatus: 'Account Status'
+                accountStatus: 'Account Status',
+                welcomePrefix: 'Hello,',
+                welcomeSub: 'Welcome back to Swadesh Seba!',
+                exitQuestion: 'Do you want to exit the app?',
+                exitYes: 'Yes',
+                exitNo: 'No'
             }
         };
 
@@ -892,6 +1019,11 @@
             const sInput = document.getElementById('global-service-search-input');
             const congratsEl = document.getElementById('congrats-greeting-banner');
             const accStatusEl = document.getElementById('me-account-status-label');
+            const wPrefix = document.getElementById('welcome-prefix-label');
+            const wSub = document.getElementById('welcome-back-sub');
+            const exQ = document.getElementById('exit-confirm-question');
+            const exYes = document.getElementById('exit-yes-btn');
+            const exNo = document.getElementById('exit-no-btn');
 
             if (logoutEl) logoutEl.innerText = t.logout;
             if (pSec) pSec.innerText = t.primaryServices;
@@ -913,16 +1045,25 @@
             if (sInput) sInput.placeholder = t.searchPlaceholder;
             if (congratsEl) congratsEl.innerText = t.congratsText;
             if (accStatusEl) accStatusEl.innerText = t.accountStatus;
+            if (wPrefix) wPrefix.innerText = t.welcomePrefix;
+            if (wSub) wSub.innerText = t.welcomeSub;
+            if (exQ) exQ.innerText = t.exitQuestion;
+            if (exYes) exYes.innerText = t.exitYes;
+            if (exNo) exNo.innerText = t.exitNo;
         };
 
         function syncProfileTexts() {
             const profTitleEl = document.getElementById('prof-title');
             const meNameEl = document.getElementById('me-page-name');
+            const welcomeNameEl = document.getElementById('welcome-user-name');
             const profInput = document.getElementById('profile-name-input');
-            if (profTitleEl) profTitleEl.innerText = savedProfileTitle;
-            if (meNameEl) meNameEl.innerText = savedProfileTitle;
+            const activeDisplayName = savedUserName || savedProfileTitle || 'স্বদেশ সেবা';
+
+            if (profTitleEl) profTitleEl.innerText = activeDisplayName;
+            if (meNameEl) meNameEl.innerText = activeDisplayName;
+            if (welcomeNameEl) welcomeNameEl.innerText = activeDisplayName;
             if (profInput && document.activeElement !== profInput) {
-                profInput.value = savedProfileTitle;
+                profInput.value = activeDisplayName;
             }
         }
 
@@ -931,7 +1072,9 @@
             const fb = document.getElementById('settings-feedback-msg');
             const nextTitle = (input && input.value.trim()) ? input.value.trim() : 'স্বদেশ সেবা';
             savedProfileTitle = nextTitle;
+            savedUserName = nextTitle;
             localStorage.setItem('swadesh_profile_title', savedProfileTitle);
+            localStorage.setItem('swadesh_user_name', savedUserName);
             syncProfileTexts();
             if (fb) fb.innerText = uiTexts[currentLang].profileSaved;
         };
@@ -997,15 +1140,38 @@
         // হোম হিস্ট্রি এন্ট্রি পুশ করা যাতে ফোনের ব্যাক বাটনে অ্যাপ থেকে বের হয়ে না যায়
         function ensureHomeHistoryState() {
             try {
-                if (!window.history.state || !window.history.state.swadeshHomeGuard) {
-                    window.history.pushState({ swadeshHomeGuard: true }, '', window.location.href);
-                }
+                window.history.pushState({ swadeshHomeGuard: true, ts: Date.now() }, '', window.location.href);
             } catch (_) {}
         }
 
-        // মডিউলে ক্লিক করলে সরাসরি পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে; অ্যাপের ব্যাক বাটন কাজ করবে না
+        function setExitDialogVisible(open) {
+            exitDialogOpen = Boolean(open);
+            const modal = document.getElementById('exit-confirm-modal');
+            if (modal) {
+                modal.style.display = exitDialogOpen ? 'flex' : 'none';
+            }
+        }
+
+        window.confirmExitApp = (shouldExit) => {
+            setExitDialogVisible(false);
+            ensureHomeHistoryState();
+            if (shouldExit) {
+                try {
+                    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.exitApp === 'function') {
+                        window.Capacitor.Plugins.App.exitApp();
+                        return;
+                    }
+                } catch (_) {}
+                try {
+                    window.close();
+                } catch (_) {}
+            }
+        };
+
+        // মডিউলে ক্লিক করলে সরাসরি অ্যাপ কন্টেইনারের ভেতরে পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে
         window.openServiceStep = (title, url) => {
             if (!url || url === '#') return;
+            setExitDialogVisible(false);
             const overlay = document.getElementById('fullscreen-module-overlay');
             const iframe = document.getElementById('fullscreen-module-iframe');
 
@@ -1017,7 +1183,7 @@
             ensureHomeHistoryState();
         };
 
-        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আবার সাধারণ ইন্টারফেস (হোম পেজ) দেখাবে
+        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আবার মূল হোম পেজ দেখাবে
         window.closeServiceViewer = () => {
             const overlay = document.getElementById('fullscreen-module-overlay');
             const iframe = document.getElementById('fullscreen-module-iframe');
@@ -1031,8 +1197,14 @@
             ensureHomeHistoryState();
         };
 
-        // ফোনের হার্ডওয়্যার / ব্রাউজার ব্যাক বাটন হ্যান্ডলিং: অ্যাপ থেকে বের না করে হোম পেজে নিয়ে আসবে
+        // ফোনের হার্ডওয়্যার / ব্রাউজার ব্যাক বাটন হ্যান্ডলিং:
+        // মডিউল বা অন্য ট্যাবে থাকলে মূল হোম পেজে নিয়ে আসবে; হোম পেজে থাকলে "আপনি কি অ্যাপ থেকে বের হতে চান? হ্যাঁ বা না" দেখাবে
         function handlePhoneBackAction() {
+            if (exitDialogOpen) {
+                setExitDialogVisible(false);
+                ensureHomeHistoryState();
+                return true;
+            }
             if (isModuleFullscreenActive) {
                 window.closeServiceViewer();
                 return true;
@@ -1042,7 +1214,7 @@
                 ensureHomeHistoryState();
                 return true;
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setExitDialogVisible(true);
             ensureHomeHistoryState();
             return true;
         }
@@ -1062,7 +1234,7 @@
             handlePhoneBackAction();
         });
 
-        // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে ড্যাশবোর্ডে ফেরার সিগন্যাল গ্রহণ
+        // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে হোমে ফেরার সিগন্যাল গ্রহণ
         window.addEventListener('message', (event) => {
             const data = event && event.data;
             if (data === 'CLOSE_MODULE' || data === 'BACK_TO_HOME' || (data && (data.action === 'closeModule' || data.action === 'backToHome'))) {
@@ -1070,7 +1242,7 @@
             }
         });
 
-        // মডিউলের iframe লোড/নেভিগেশন পর্যবেক্ষণ করে হোমে ফেরার লিংক হলে ওভারলে বন্ধ করা
+        // মডিউলের iframe লোড/নেভিগেশন পর্যবেক্ষণ করে কন্টেইনারের ভেতরেই রাখা ও হোমে ফেরার লিংক হলে ওভারলে বন্ধ করা
         const moduleIframeEl = document.getElementById('fullscreen-module-iframe');
         if (moduleIframeEl) {
             moduleIframeEl.addEventListener('load', () => {
@@ -1149,6 +1321,7 @@
             const bottomNav = document.getElementById('bottom-nav-bar');
             const verifiedBadge = document.getElementById('email-verified-badge');
             const meVerifiedBadge = document.getElementById('me-verified-badge');
+            const welcomeVerifiedBadge = document.getElementById('welcome-verified-badge');
             const savedEmail = localStorage.getItem('swadesh_saved_email');
 
             if (currentUserState || savedEmail) {
@@ -1159,8 +1332,18 @@
                     ? (isAnonymous ? "অতিথি ব্যবহারকারী (Guest)" : (currentUserState.email || savedEmail))
                     : savedEmail;
 
-                document.getElementById('prof-email').innerText = displayEmail;
-                document.getElementById('me-page-email').innerText = displayEmail;
+                const authDisplayName = (currentUserState && currentUserState.displayName) || savedUserName;
+                if (authDisplayName) {
+                    savedUserName = authDisplayName;
+                    localStorage.setItem('swadesh_user_name', savedUserName);
+                } else if (isAnonymous) {
+                    savedUserName = "অতিথি ব্যবহারকারী";
+                }
+                syncProfileTexts();
+
+                // রেজিস্টার/লগইন করা জিমেইল/ইমেইল প্রোফাইল (মি) পেজে যুক্ত হবে; হোমপেজের হেডারে থাকবে না
+                const meEmailEl = document.getElementById('me-page-email');
+                if (meEmailEl) meEmailEl.innerText = displayEmail;
 
                 const isEmailProvider = !isAnonymous && (
                     (currentUserState && currentUserState.providerData && currentUserState.providerData.some(p => p.providerId === 'password')) ||
@@ -1171,9 +1354,11 @@
                 if (isEmailProvider) {
                     verifiedBadge.classList.add('active');
                     if (meVerifiedBadge) meVerifiedBadge.classList.add('active');
+                    if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.add('active');
                 } else {
                     verifiedBadge.classList.remove('active');
                     if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
+                    if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.remove('active');
                 }
 
                 if (!isModuleFullscreenActive) {
@@ -1190,6 +1375,7 @@
                 authScreen.style.display = 'flex';
                 verifiedBadge.classList.remove('active');
                 if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
+                if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.remove('active');
             }
         }
 
@@ -1232,10 +1418,20 @@
 
         window.submitAuthForm = (e) => {
             e.preventDefault();
+            const nameInput = document.getElementById('auth-fullname');
+            const enteredName = nameInput ? nameInput.value.trim() : '';
             const email = document.getElementById('auth-email').value.trim();
             const password = document.getElementById('auth-password').value;
             const errorBox = document.getElementById('auth-error');
             errorBox.innerText = 'যাচাই করা হচ্ছে...';
+
+            if (enteredName) {
+                savedUserName = enteredName;
+                savedProfileTitle = enteredName;
+                localStorage.setItem('swadesh_user_name', savedUserName);
+                localStorage.setItem('swadesh_profile_title', savedProfileTitle);
+                syncProfileTexts();
+            }
 
             setPersistence(auth, browserLocalPersistence)
                 .catch(() => {})
@@ -1261,17 +1457,36 @@
         };
 
         window.loginWithGoogle = () => {
+            const nameInput = document.getElementById('auth-fullname');
+            const enteredName = nameInput ? nameInput.value.trim() : '';
+            if (enteredName) {
+                savedUserName = enteredName;
+                localStorage.setItem('swadesh_user_name', savedUserName);
+            }
             setPersistence(auth, browserLocalPersistence).catch(() => {});
             signInWithPopup(auth, new GoogleAuthProvider())
                 .then((res) => {
-                    if (res && res.user && res.user.email) {
-                        localStorage.setItem('swadesh_saved_email', res.user.email);
+                    if (res && res.user) {
+                        if (res.user.email) {
+                            localStorage.setItem('swadesh_saved_email', res.user.email);
+                        }
+                        if (res.user.displayName && !enteredName) {
+                            savedUserName = res.user.displayName;
+                            localStorage.setItem('swadesh_user_name', savedUserName);
+                        }
+                        syncProfileTexts();
                     }
                 })
                 .catch(err => document.getElementById('auth-error').innerText = err.message);
         };
 
         window.loginAsGuest = () => {
+            const nameInput = document.getElementById('auth-fullname');
+            const enteredName = nameInput ? nameInput.value.trim() : '';
+            if (enteredName) {
+                savedUserName = enteredName;
+                localStorage.setItem('swadesh_user_name', savedUserName);
+            }
             setPersistence(auth, browserLocalPersistence).catch(() => {});
             signInAnonymously(auth)
                 .catch(err => document.getElementById('auth-error').innerText = err.message);
@@ -1280,6 +1495,7 @@
         window.logoutUser = () => {
             localStorage.removeItem('swadesh_saved_email');
             activeBottomTab = 'home';
+            setExitDialogVisible(false);
             window.closeServiceViewer();
             signOut(auth);
         };
