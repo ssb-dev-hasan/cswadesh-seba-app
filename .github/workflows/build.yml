@@ -28,6 +28,74 @@ jobs:
           npm install
           npm run build
           npx cap add android
+
+      - name: Configure Back Button Handling in MainActivity
+        run: |
+          MAIN_ACTIVITY=$(find android/app/src/main -name "MainActivity.java" | head -n 1)
+          if [ -n "$MAIN_ACTIVITY" ]; then
+            cat << 'EOF' > "$MAIN_ACTIVITY"
+          package com.swadeshseba.app;
+
+          import android.os.Bundle;
+          import androidx.activity.OnBackPressedCallback;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                  if (getBridge() != null && getBridge().getWebView() != null) {
+                    getBridge().getWebView().post(() ->
+                      getBridge().getWebView().evaluateJavascript(
+                        "if (typeof window.__swadeshHandleBack === 'function') { window.__swadeshHandleBack(); } else { window.history.back(); }",
+                        null
+                      )
+                    );
+                  }
+                }
+              });
+            }
+          }
+          EOF
+            PKG_LINE=$(grep -m 1 "^package " android/app/src/main/java/*/*/MainActivity.java 2>/dev/null || true)
+            ACTUAL_FILE=$(find android/app/src/main/java -name "MainActivity.java" | head -n 1)
+            if [ -n "$ACTUAL_FILE" ]; then
+              ACTUAL_PKG=$(grep -m 1 "^package " "$ACTUAL_FILE" || echo "package com.swadeshseba.app;")
+              cat << EOF > "$ACTUAL_FILE"
+          $ACTUAL_PKG
+
+          import android.os.Bundle;
+          import androidx.activity.OnBackPressedCallback;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+              super.onCreate(savedInstanceState);
+              getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                  if (getBridge() != null && getBridge().getWebView() != null) {
+                    getBridge().getWebView().post(() ->
+                      getBridge().getWebView().evaluateJavascript(
+                        "if (typeof window.__swadeshHandleBack === 'function') { window.__swadeshHandleBack(); } else { window.history.back(); }",
+                        null
+                      )
+                    );
+                  }
+                }
+              });
+            }
+          }
+          EOF
+            fi
+          fi
+
+      - name: Sync Capacitor Android
+        run: |
           npx cap sync android
 
       - name: Build Android APK & AAB
