@@ -42,6 +42,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-bottom: 74px;
             transition: background-color 0.25s ease, color 0.25s ease;
         }
 
@@ -52,7 +53,7 @@
             box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
         }
 
-        /* ১. স্প্ল্যাশ স্ক্রিন (শুধু নাম, নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম এবং স্বদেশ সেবা লোগো) */
+        /* ১. স্প্ল্যাশ স্ক্রিন */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -230,7 +231,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 16px;
-            margin-bottom: 10px;
+            margin-bottom: 18px;
             gap: 8px;
         }
 
@@ -254,14 +255,15 @@
         .verified-badge {
             display: none;
             align-items: center;
-            gap: 3px;
-            background: #e0f2fe;
-            color: #0369a1;
-            border: 1px solid #bae6fd;
-            font-size: 10px;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--verified-blue);
+            color: #ffffff;
+            font-size: 11px;
             font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 999px;
+            border-radius: 50%;
+            line-height: 1;
         }
 
         .verified-badge.active {
@@ -275,20 +277,6 @@
             flex-shrink: 0;
         }
 
-        .gear-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            border: 1px solid var(--border-light);
-            background: var(--bg-white);
-            color: var(--text-dark);
-            font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
         .logout-btn {
             background: #fef2f2;
             color: #dc2626;
@@ -296,37 +284,69 @@
             padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
         }
 
-        /* সেটিং গিয়ার বক্স প্যানেল */
-        #settings-gear-panel {
+        /* আলাদা ট্যাব/স্ক্রিন পেজ (সার্চ, প্রোফাইল/মি, সেটিং গিয়ার বক্স - ওপেন হলে হোমপেজের কোনো কিছু দেখাবে না) */
+        .standalone-page-view {
             display: none;
-            padding: 16px;
+            flex: 1;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 18px 16px;
+            background-color: var(--bg-white);
+        }
+
+        .congrats-banner-box {
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            color: #1e3a8a;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        body.dark-theme .congrats-banner-box {
+            background: #172554;
+            border-color: #1d4ed8;
+            color: #dbeafe;
+        }
+
+        .me-profile-card {
+            padding: 18px 16px;
             margin-bottom: 16px;
+        }
+
+        .me-user-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 8px;
+        }
+
+        .me-user-email {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 3px;
         }
 
         .settings-panel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-light);
         }
 
         .settings-panel-title {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-dark);
-        }
-
-        .settings-close-btn {
-            border: 1px solid var(--border-light);
-            background: var(--bg-white);
-            color: var(--text-dark);
-            border-radius: 8px;
-            padding: 4px 10px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
         }
 
         .settings-row {
@@ -334,7 +354,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .settings-label {
@@ -349,7 +369,7 @@
         }
 
         .option-pill-btn {
-            padding: 6px 12px;
+            padding: 7px 12px;
             border-radius: 8px;
             border: 1px solid var(--border-light);
             background: var(--bg-white);
@@ -366,12 +386,12 @@
         }
 
         .profile-settings-box {
-            padding-top: 12px;
+            padding-top: 14px;
             border-top: 1px solid var(--border-light);
         }
 
         .profile-save-btn {
-            padding: 8px 14px;
+            padding: 9px 16px;
             border-radius: 9px;
             border: none;
             background: var(--brand-accent);
@@ -389,43 +409,24 @@
             font-weight: 600;
         }
 
-        /* প্রোফাইলের নিচে ব্যাক অ্যারো বার (শুধুমাত্র ড্যাশবোর্ডে দৃশ্যমান; মডিউল ওপেন থাকলে সম্পূর্ণ অদৃশ্য) */
-        .profile-back-bar {
+        .search-results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .search-result-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 12px;
-            margin-bottom: 20px;
-            background: var(--surface-light);
-            border: 1px solid var(--border-light);
-            border-radius: 11px;
-        }
-
-        .step-back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-white);
-            color: var(--text-dark);
-            border: 1px solid #cbd5e1;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+            padding: 12px 14px;
             cursor: pointer;
+            text-decoration: none;
+            color: var(--text-dark);
         }
 
-        .step-back-btn:active {
-            background: #f1f5f9;
-        }
-
-        .nav-history-indicator {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* ফুল-স্ক্রিন মডিউল ওভারলে (মডিউলে ক্লিক করলে পুরো স্ক্রিনে শুধু সেই মডিউলটাই দেখাবে) */
+        /* ফুল-স্ক্রিন মডিউল ওভারলে */
         #fullscreen-module-overlay {
             display: none;
             position: fixed;
@@ -494,6 +495,52 @@
             border: 1px dashed #cbd5e1; border-radius: 12px;
             color: var(--text-muted); font-size: 12px;
             background: var(--surface-light);
+        }
+
+        /* নিচের বটম নেভিগেশন আইকন বার (হোম, সার্চ বক্স, প্রোফাইল মি, সেটিং গিয়ার বক্স) */
+        #bottom-nav-bar {
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 62px;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-light);
+            z-index: 900;
+            justify-content: space-around;
+            align-items: center;
+            padding: 4px 8px;
+        }
+
+        .bottom-nav-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            cursor: pointer;
+            padding: 4px 2px;
+            border-radius: 10px;
+        }
+
+        .bottom-nav-btn.active {
+            color: var(--brand-accent);
+            font-weight: 700;
+        }
+
+        .bottom-nav-icon {
+            font-size: 18px;
+            line-height: 1.1;
+        }
+
+        .bottom-nav-label {
+            font-size: 10px;
+            font-weight: 600;
         }
 
         /* ৪. কপিরাইট ফুটার */
@@ -567,7 +614,7 @@
         </div>
     </div>
 
-    <!-- মেইন অ্যাপ ড্যাশবোর্ড -->
+    <!-- মেইন অ্যাপ ড্যাশবোর্ড (হোম পেজ) -->
     <main id="main-app-screen">
         <header class="clean-surface profile-header">
             <div class="profile-info">
@@ -575,60 +622,15 @@
                 <div>
                     <div class="profile-name-row">
                         <span id="prof-title">স্বদেশ সেবা</span>
-                        <span class="verified-badge" id="email-verified-badge">✓ ভেরিফাইড</span>
+                        <span class="verified-badge" id="email-verified-badge" title="Verified">✓</span>
                     </div>
                     <div style="font-size: 11px; color: var(--text-muted);" id="prof-email">user@email.com</div>
                 </div>
             </div>
             <div class="header-actions">
-                <button type="button" class="gear-btn" id="settings-gear-btn" onclick="toggleSettingsGearPanel()" title="সেটিংস">⚙️</button>
                 <button class="logout-btn" id="logout-btn-el" onclick="logoutUser()">লগআউট</button>
             </div>
         </header>
-
-        <!-- সেটিং গিয়ার বক্স -->
-        <section class="clean-surface" id="settings-gear-panel">
-            <div class="settings-panel-header">
-                <span class="settings-panel-title" id="settings-box-title">সেটিংস</span>
-                <button type="button" class="settings-close-btn" id="settings-close-btn" onclick="toggleSettingsGearPanel(false)">✕</button>
-            </div>
-
-            <!-- থিম মোড: ডার্ক / লাইট -->
-            <div class="settings-row">
-                <span class="settings-label" id="theme-setting-label">থিম মোড</span>
-                <div class="option-pill-group">
-                    <button type="button" class="option-pill-btn active" id="btn-theme-light" onclick="setAppTheme('light')">লাইট মোড</button>
-                    <button type="button" class="option-pill-btn" id="btn-theme-dark" onclick="setAppTheme('dark')">ডার্ক মোড</button>
-                </div>
-            </div>
-
-            <!-- ভাষা নির্বাচন: বাংলা / ইংলিশ -->
-            <div class="settings-row">
-                <span class="settings-label" id="lang-setting-label">ভাষা / Language</span>
-                <div class="option-pill-group">
-                    <button type="button" class="option-pill-btn active" id="btn-lang-bn" onclick="setAppLanguage('bn')">বাংলা</button>
-                    <button type="button" class="option-pill-btn" id="btn-lang-en" onclick="setAppLanguage('en')">English</button>
-                </div>
-            </div>
-
-            <!-- প্রোফাইল সেটিংস -->
-            <div class="profile-settings-box">
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <label id="profile-name-label">প্রোফাইল সেটিংস (নাম / শিরোনাম)</label>
-                    <input type="text" id="profile-name-input" class="clean-input" placeholder="স্বদেশ সেবা">
-                </div>
-                <button type="button" class="profile-save-btn" id="profile-save-btn" onclick="saveProfileSettings()">প্রোফাইল সেভ করুন</button>
-                <div class="settings-feedback" id="settings-feedback-msg"></div>
-            </div>
-        </section>
-
-        <!-- প্রোফাইলের নিচে ব্যাক অ্যারো বার (শুধুমাত্র ড্যাশবোর্ডের জন্য; মডিউল ওপেন থাকলে অ্যাপের ব্যাক বাটন কাজ করবে না) -->
-        <div class="profile-back-bar" id="dashboard-back-bar">
-            <button type="button" class="step-back-btn" id="step-back-btn" onclick="stepBackHistory()">
-                <span>←</span> <span id="back-btn-text">ব্যাক</span>
-            </button>
-            <span class="nav-history-indicator" id="nav-history-status">হোম ড্যাশবোর্ড</span>
-        </div>
 
         <div class="section-block">
             <div class="section-label" id="label-primary-services">প্রধান সেবাসমূহ</div>
@@ -652,6 +654,97 @@
             <section class="reviews-list" id="unlimited_reviews"><div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div></section>
         </div>
     </main>
+
+    <!-- আলাদা সার্চ বক্স পেজ -->
+    <section class="standalone-page-view" id="search-page-view">
+        <div class="settings-panel-header">
+            <span class="settings-panel-title" id="search-page-title">সার্চ বক্স</span>
+        </div>
+        <div class="input-group" style="margin-bottom: 6px;">
+            <input type="text" id="global-service-search-input" class="clean-input" placeholder="সার্ভিস বা মডিউল খুঁজুন..." oninput="renderSearchResults()">
+        </div>
+        <div class="search-results-list" id="search-results-container">
+            <div class="empty-slot">যেকোনো সেবা বা মডিউলের নাম লিখে খুঁজুন</div>
+        </div>
+    </section>
+
+    <!-- আলাদা প্রোফাইল / মি (Me) পেজ -->
+    <section class="standalone-page-view" id="me-profile-page-view">
+        <div class="congrats-banner-box" id="congrats-greeting-banner">
+            স্বদেশ সেবার পক্ষ থেকে অভিনন্দন
+        </div>
+
+        <div class="clean-surface me-profile-card">
+            <div class="profile-avatar">👤</div>
+            <div class="me-user-name-row">
+                <span id="me-page-name">স্বদেশ সেবা</span>
+                <span class="verified-badge" id="me-verified-badge" title="Verified">✓</span>
+            </div>
+            <div class="me-user-email" id="me-page-email">user@email.com</div>
+        </div>
+
+        <div class="clean-surface" style="padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 13px; font-weight: 600;" id="me-account-status-label">অ্যাকাউন্ট স্ট্যাটাস</span>
+            <button class="logout-btn" onclick="logoutUser()">লগআউট</button>
+        </div>
+    </section>
+
+    <!-- আলাদা সেটিং গিয়ার বক্স পেজ -->
+    <section class="standalone-page-view" id="settings-page-view">
+        <div class="clean-surface" style="padding: 16px;">
+            <div class="settings-panel-header">
+                <span class="settings-panel-title" id="settings-box-title">সেটিংস</span>
+            </div>
+
+            <!-- থিম মোড: লাইট / ডার্ক -->
+            <div class="settings-row">
+                <span class="settings-label" id="theme-setting-label">থিম মোড</span>
+                <div class="option-pill-group">
+                    <button type="button" class="option-pill-btn active" id="btn-theme-light" onclick="setAppTheme('light')">লাইট মোড</button>
+                    <button type="button" class="option-pill-btn" id="btn-theme-dark" onclick="setAppTheme('dark')">ডার্ক মোড</button>
+                </div>
+            </div>
+
+            <!-- ভাষা নির্বাচন: বাংলা / English -->
+            <div class="settings-row">
+                <span class="settings-label" id="lang-setting-label">ভাষা / Language</span>
+                <div class="option-pill-group">
+                    <button type="button" class="option-pill-btn active" id="btn-lang-bn" onclick="setAppLanguage('bn')">বাংলা</button>
+                    <button type="button" class="option-pill-btn" id="btn-lang-en" onclick="setAppLanguage('en')">English</button>
+                </div>
+            </div>
+
+            <!-- প্রোফাইল সেটিংস -->
+            <div class="profile-settings-box">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <label id="profile-name-label">প্রোফাইল সেটিংস (নাম / শিরোনাম)</label>
+                    <input type="text" id="profile-name-input" class="clean-input" placeholder="স্বদেশ সেবা">
+                </div>
+                <button type="button" class="profile-save-btn" id="profile-save-btn" onclick="saveProfileSettings()">প্রোফাইল সেভ করুন</button>
+                <div class="settings-feedback" id="settings-feedback-msg"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- নিচের বটম নেভিগেশন আইকন বার -->
+    <nav id="bottom-nav-bar" aria-label="Bottom Navigation">
+        <button type="button" class="bottom-nav-btn active" id="nav-btn-home" onclick="switchBottomTab('home')">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label" id="nav-label-home">হোম</span>
+        </button>
+        <button type="button" class="bottom-nav-btn" id="nav-btn-search" onclick="switchBottomTab('search')">
+            <span class="bottom-nav-icon">🔍</span>
+            <span class="bottom-nav-label" id="nav-label-search">সার্চ বক্স</span>
+        </button>
+        <button type="button" class="bottom-nav-btn" id="nav-btn-me" onclick="switchBottomTab('me')">
+            <span class="bottom-nav-icon">👤</span>
+            <span class="bottom-nav-label" id="nav-label-me">প্রোফাইল মি</span>
+        </button>
+        <button type="button" class="bottom-nav-btn" id="nav-btn-settings" onclick="switchBottomTab('settings')">
+            <span class="bottom-nav-icon">⚙️</span>
+            <span class="bottom-nav-label" id="nav-label-settings">সেটিংস</span>
+        </button>
+    </nav>
 
     <!-- ফুটার কপিরাইট -->
     <footer class="app-footer-copyright" id="app-footer">
@@ -702,6 +795,7 @@
         let authChecked = false;
         let currentUserState = null;
         let isModuleFullscreenActive = false;
+        let activeBottomTab = 'home';
 
         // সেটিংস স্টেট (ডার্ক/লাইট মোড, ভাষা, প্রোফাইল নাম)
         let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
@@ -711,9 +805,6 @@
         const uiTexts = {
             bn: {
                 logout: 'লগআউট',
-                back: 'ব্যাক',
-                homeStatus: 'হোম ড্যাশবোর্ড',
-                backToHomeMsg: 'আপনি হোম পেজে আছেন',
                 primaryServices: 'প্রধান সেবাসমূহ',
                 promoBanners: 'বিশেষ ঘোষণা ও ব্যানার',
                 specialModules: 'বিশেষ মডিউল',
@@ -725,13 +816,18 @@
                 langLabel: 'ভাষা / Language',
                 profileLabel: 'প্রোফাইল সেটিংস (নাম / শিরোনাম)',
                 saveProfile: 'প্রোফাইল সেভ করুন',
-                profileSaved: 'প্রোফাইল সেটিংস সেভ হয়েছে'
+                profileSaved: 'প্রোফাইল সেটিংস সেভ হয়েছে',
+                navHome: 'হোম',
+                navSearch: 'সার্চ বক্স',
+                navMe: 'প্রোফাইল মি',
+                navSettings: 'সেটিংস',
+                searchTitle: 'সার্চ বক্স',
+                searchPlaceholder: 'সার্ভিস বা মডিউল খুঁজুন...',
+                congratsText: 'স্বদেশ সেবার পক্ষ থেকে অভিনন্দন',
+                accountStatus: 'অ্যাকাউন্ট স্ট্যাটাস'
             },
             en: {
                 logout: 'Logout',
-                back: 'Back',
-                homeStatus: 'Home Dashboard',
-                backToHomeMsg: 'You are on Home Page',
                 primaryServices: 'Primary Services',
                 promoBanners: 'Special Announcements & Banners',
                 specialModules: 'Special Modules',
@@ -743,7 +839,15 @@
                 langLabel: 'Language',
                 profileLabel: 'Profile Settings (Name / Title)',
                 saveProfile: 'Save Profile',
-                profileSaved: 'Profile settings saved'
+                profileSaved: 'Profile settings saved',
+                navHome: 'Home',
+                navSearch: 'Search',
+                navMe: 'Profile Me',
+                navSettings: 'Settings',
+                searchTitle: 'Search Box',
+                searchPlaceholder: 'Search service or module...',
+                congratsText: 'Congratulations from Swadesh Seba',
+                accountStatus: 'Account Status'
             }
         };
 
@@ -769,8 +873,6 @@
 
             const t = uiTexts[currentLang];
             const logoutEl = document.getElementById('logout-btn-el');
-            const backTextEl = document.getElementById('back-btn-text');
-            const statusEl = document.getElementById('nav-history-status');
             const pSec = document.getElementById('label-primary-services');
             const bSec = document.getElementById('label-promo-banners');
             const sSec = document.getElementById('label-special-modules');
@@ -782,10 +884,16 @@
             const lgLbl = document.getElementById('lang-setting-label');
             const prLbl = document.getElementById('profile-name-label');
             const prSave = document.getElementById('profile-save-btn');
+            const nHome = document.getElementById('nav-label-home');
+            const nSearch = document.getElementById('nav-label-search');
+            const nMe = document.getElementById('nav-label-me');
+            const nSettings = document.getElementById('nav-label-settings');
+            const sPageTitle = document.getElementById('search-page-title');
+            const sInput = document.getElementById('global-service-search-input');
+            const congratsEl = document.getElementById('congrats-greeting-banner');
+            const accStatusEl = document.getElementById('me-account-status-label');
 
             if (logoutEl) logoutEl.innerText = t.logout;
-            if (backTextEl) backTextEl.innerText = t.back;
-            if (statusEl && !isModuleFullscreenActive) statusEl.innerText = t.homeStatus;
             if (pSec) pSec.innerText = t.primaryServices;
             if (bSec) bSec.innerText = t.promoBanners;
             if (sSec) sSec.innerText = t.specialModules;
@@ -797,20 +905,26 @@
             if (lgLbl) lgLbl.innerText = t.langLabel;
             if (prLbl) prLbl.innerText = t.profileLabel;
             if (prSave) prSave.innerText = t.saveProfile;
+            if (nHome) nHome.innerText = t.navHome;
+            if (nSearch) nSearch.innerText = t.navSearch;
+            if (nMe) nMe.innerText = t.navMe;
+            if (nSettings) nSettings.innerText = t.navSettings;
+            if (sPageTitle) sPageTitle.innerText = t.searchTitle;
+            if (sInput) sInput.placeholder = t.searchPlaceholder;
+            if (congratsEl) congratsEl.innerText = t.congratsText;
+            if (accStatusEl) accStatusEl.innerText = t.accountStatus;
         };
 
-        window.toggleSettingsGearPanel = (forceState) => {
-            const panel = document.getElementById('settings-gear-panel');
-            if (!panel) return;
-            const shouldOpen = typeof forceState === 'boolean' ? forceState : (panel.style.display !== 'block');
-            panel.style.display = shouldOpen ? 'block' : 'none';
-            const fb = document.getElementById('settings-feedback-msg');
-            if (fb) fb.innerText = '';
-            const input = document.getElementById('profile-name-input');
-            if (shouldOpen && input) {
-                input.value = savedProfileTitle;
+        function syncProfileTexts() {
+            const profTitleEl = document.getElementById('prof-title');
+            const meNameEl = document.getElementById('me-page-name');
+            const profInput = document.getElementById('profile-name-input');
+            if (profTitleEl) profTitleEl.innerText = savedProfileTitle;
+            if (meNameEl) meNameEl.innerText = savedProfileTitle;
+            if (profInput && document.activeElement !== profInput) {
+                profInput.value = savedProfileTitle;
             }
-        };
+        }
 
         window.saveProfileSettings = () => {
             const input = document.getElementById('profile-name-input');
@@ -818,31 +932,64 @@
             const nextTitle = (input && input.value.trim()) ? input.value.trim() : 'স্বদেশ সেবা';
             savedProfileTitle = nextTitle;
             localStorage.setItem('swadesh_profile_title', savedProfileTitle);
-            const profTitleEl = document.getElementById('prof-title');
-            if (profTitleEl) profTitleEl.innerText = savedProfileTitle;
+            syncProfileTexts();
             if (fb) fb.innerText = uiTexts[currentLang].profileSaved;
+        };
+
+        window.switchBottomTab = (tabName) => {
+            if (!currentUserState && !localStorage.getItem('swadesh_saved_email')) return;
+            activeBottomTab = tabName || 'home';
+
+            const homeScreen = document.getElementById('main-app-screen');
+            const searchView = document.getElementById('search-page-view');
+            const meView = document.getElementById('me-profile-page-view');
+            const settingsView = document.getElementById('settings-page-view');
+            const footer = document.getElementById('app-footer');
+
+            homeScreen.style.display = activeBottomTab === 'home' ? 'block' : 'none';
+            searchView.style.display = activeBottomTab === 'search' ? 'block' : 'none';
+            meView.style.display = activeBottomTab === 'me' ? 'block' : 'none';
+            settingsView.style.display = activeBottomTab === 'settings' ? 'block' : 'none';
+            if (footer) footer.style.display = activeBottomTab === 'home' ? 'block' : 'none';
+
+            document.getElementById('nav-btn-home').classList.toggle('active', activeBottomTab === 'home');
+            document.getElementById('nav-btn-search').classList.toggle('active', activeBottomTab === 'search');
+            document.getElementById('nav-btn-me').classList.toggle('active', activeBottomTab === 'me');
+            document.getElementById('nav-btn-settings').classList.toggle('active', activeBottomTab === 'settings');
+
+            const fb = document.getElementById('settings-feedback-msg');
+            if (fb) fb.innerText = '';
+            syncProfileTexts();
+            if (activeBottomTab === 'search') {
+                renderSearchResults();
+            }
+            window.scrollTo(0, 0);
         };
 
         function applySavedPreferences() {
             window.setAppTheme(currentTheme);
             window.setAppLanguage(currentLang);
-            const profTitleEl = document.getElementById('prof-title');
-            if (profTitleEl && savedProfileTitle) {
-                profTitleEl.innerText = savedProfileTitle;
-            }
+            syncProfileTexts();
         }
         window.addEventListener('DOMContentLoaded', applySavedPreferences);
 
         function setDashboardVisibility(showDashboard) {
-            const mainScreen = document.getElementById('main-app-screen');
+            const bottomNav = document.getElementById('bottom-nav-bar');
             const footer = document.getElementById('app-footer');
-            if (!currentUserState && !localStorage.getItem('swadesh_saved_email')) return;
+            if (!currentUserState && !localStorage.getItem('swadesh_saved_email')) {
+                if (bottomNav) bottomNav.style.display = 'none';
+                return;
+            }
 
             if (showDashboard) {
-                mainScreen.style.display = 'block';
-                if (footer) footer.style.display = 'block';
+                if (bottomNav) bottomNav.style.display = 'flex';
+                window.switchBottomTab(activeBottomTab);
             } else {
-                mainScreen.style.display = 'none';
+                document.getElementById('main-app-screen').style.display = 'none';
+                document.getElementById('search-page-view').style.display = 'none';
+                document.getElementById('me-profile-page-view').style.display = 'none';
+                document.getElementById('settings-page-view').style.display = 'none';
+                if (bottomNav) bottomNav.style.display = 'none';
                 if (footer) footer.style.display = 'none';
             }
         }
@@ -859,7 +1006,6 @@
         // মডিউলে ক্লিক করলে সরাসরি পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে; অ্যাপের ব্যাক বাটন কাজ করবে না
         window.openServiceStep = (title, url) => {
             if (!url || url === '#') return;
-            window.toggleSettingsGearPanel(false);
             const overlay = document.getElementById('fullscreen-module-overlay');
             const iframe = document.getElementById('fullscreen-module-iframe');
 
@@ -879,27 +1025,23 @@
             isModuleFullscreenActive = false;
             iframe.src = 'about:blank';
             overlay.style.display = 'none';
+            activeBottomTab = 'home';
             setDashboardVisibility(true);
-            const statusEl = document.getElementById('nav-history-status');
-            if (statusEl) statusEl.innerText = uiTexts[currentLang].homeStatus;
             window.scrollTo(0, 0);
             ensureHomeHistoryState();
         };
 
         // ফোনের হার্ডওয়্যার / ব্রাউজার ব্যাক বাটন হ্যান্ডলিং: অ্যাপ থেকে বের না করে হোম পেজে নিয়ে আসবে
         function handlePhoneBackAction() {
-            const gearPanel = document.getElementById('settings-gear-panel');
             if (isModuleFullscreenActive) {
                 window.closeServiceViewer();
                 return true;
             }
-            if (gearPanel && gearPanel.style.display === 'block') {
-                window.toggleSettingsGearPanel(false);
+            if (activeBottomTab !== 'home') {
+                window.switchBottomTab('home');
                 ensureHomeHistoryState();
                 return true;
             }
-            const statusEl = document.getElementById('nav-history-status');
-            if (statusEl) statusEl.innerText = uiTexts[currentLang].backToHomeMsg;
             window.scrollTo({ top: 0, behavior: 'smooth' });
             ensureHomeHistoryState();
             return true;
@@ -948,21 +1090,6 @@
                 }
             });
         }
-
-        // ড্যাশবোর্ডের ব্যাক বাটন (শুধুমাত্র মডিউল ওপেন না থাকলে কাজ করবে; মডিউল ওপেন থাকলে নিজস্ব ব্যাক বাটন কাজ করবে)
-        window.stepBackHistory = () => {
-            if (isModuleFullscreenActive) {
-                return;
-            }
-            const gearPanel = document.getElementById('settings-gear-panel');
-            if (gearPanel && gearPanel.style.display === 'block') {
-                window.toggleSettingsGearPanel(false);
-                return;
-            }
-            const statusEl = document.getElementById('nav-history-status');
-            if (statusEl) statusEl.innerText = uiTexts[currentLang].backToHomeMsg;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
 
         // নোটিফিকেশন পারমিশন প্রম্পটে অ্যাপ ক্র্যাশ/বন্ধ হওয়া প্রতিরোধে নিরাপদ হ্যান্ডলিং
         function initNativePushNotifications() {
@@ -1018,17 +1145,14 @@
         function routeScreen() {
             if (!splashFinished) return;
             const authScreen = document.getElementById('auth-screen');
-            const mainScreen = document.getElementById('main-app-screen');
             const footer = document.getElementById('app-footer');
+            const bottomNav = document.getElementById('bottom-nav-bar');
             const verifiedBadge = document.getElementById('email-verified-badge');
+            const meVerifiedBadge = document.getElementById('me-verified-badge');
             const savedEmail = localStorage.getItem('swadesh_saved_email');
 
             if (currentUserState || savedEmail) {
                 authScreen.style.display = 'none';
-                if (!isModuleFullscreenActive) {
-                    mainScreen.style.display = 'block';
-                    if (footer) footer.style.display = 'block';
-                }
 
                 const isAnonymous = currentUserState ? currentUserState.isAnonymous : false;
                 const displayEmail = currentUserState
@@ -1036,23 +1160,36 @@
                     : savedEmail;
 
                 document.getElementById('prof-email').innerText = displayEmail;
+                document.getElementById('me-page-email').innerText = displayEmail;
 
                 const isEmailProvider = !isAnonymous && (
                     (currentUserState && currentUserState.providerData && currentUserState.providerData.some(p => p.providerId === 'password')) ||
                     Boolean(savedEmail)
                 );
 
-                // ইমেইল দিয়ে লগইন করলে প্রোফাইলে ভেরিফাইড টিক যুক্ত থাকবে
+                // রেজিস্টার/লগইন করার পর নামের পাশে ব্লু ভেরিফাইড টিক
                 if (isEmailProvider) {
                     verifiedBadge.classList.add('active');
+                    if (meVerifiedBadge) meVerifiedBadge.classList.add('active');
                 } else {
                     verifiedBadge.classList.remove('active');
+                    if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
+                }
+
+                if (!isModuleFullscreenActive) {
+                    if (bottomNav) bottomNav.style.display = 'flex';
+                    window.switchBottomTab(activeBottomTab);
                 }
             } else {
-                mainScreen.style.display = 'none';
+                document.getElementById('main-app-screen').style.display = 'none';
+                document.getElementById('search-page-view').style.display = 'none';
+                document.getElementById('me-profile-page-view').style.display = 'none';
+                document.getElementById('settings-page-view').style.display = 'none';
+                if (bottomNav) bottomNav.style.display = 'none';
                 if (footer) footer.style.display = 'block';
                 authScreen.style.display = 'flex';
                 verifiedBadge.classList.remove('active');
+                if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
             }
         }
 
@@ -1142,6 +1279,7 @@
 
         window.logoutUser = () => {
             localStorage.removeItem('swadesh_saved_email');
+            activeBottomTab = 'home';
             window.closeServiceViewer();
             signOut(auth);
         };
@@ -1161,6 +1299,44 @@
         const MAX_VISIBLE_CARDS = 12;
         const expandedState = { primary_services: false, special_modules: false };
         const cachedSectionData = { primary_services: [], special_modules: [] };
+        let cachedBannersData = [];
+
+        window.renderSearchResults = () => {
+            const input = document.getElementById('global-service-search-input');
+            const container = document.getElementById('search-results-container');
+            if (!input || !container) return;
+
+            const q = input.value.trim().toLowerCase();
+            const allItems = [
+                ...(cachedSectionData.primary_services || []).map(i => ({ title: i.title || '', icon: i.icon || '📌', link: i.link || '#' })),
+                ...(cachedSectionData.special_modules || []).map(i => ({ title: i.title || '', icon: i.icon || '🧩', link: i.link || '#' })),
+                ...(cachedBannersData || []).map(b => ({ title: b.title || '', icon: '📢', link: b.link || '#' }))
+            ];
+
+            const filtered = q
+                ? allItems.filter(item => item.title.toLowerCase().includes(q))
+                : allItems;
+
+            if (!filtered.length) {
+                container.innerHTML = `<div class="empty-slot">কোনো ফলাফল পাওয়া যায়নি</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(item => {
+                const safeTitle = (item.title || '').replace(/"/g, '&quot;');
+                const safeLink = (item.link || '#').replace(/"/g, '&quot;');
+                const row = document.createElement('a');
+                row.href = safeLink;
+                row.className = 'clean-surface search-result-item';
+                row.innerHTML = `<span>${item.icon} &nbsp; <strong>${item.title || 'সার্ভিস'}</strong></span><span>→</span>`;
+                row.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.openServiceStep(safeTitle, safeLink);
+                });
+                container.appendChild(row);
+            });
+        };
 
         function renderFourColSection(sectionId, showBadge = false) {
             const container = document.getElementById(sectionId);
@@ -1209,11 +1385,13 @@
             const data = snap.val();
             cachedSectionData.primary_services = data ? Object.values(data).filter(i => i.active !== false) : [];
             renderFourColSection('primary_services', false);
+            if (activeBottomTab === 'search') renderSearchResults();
         });
 
         onValue(ref(db, 'promo_banners'), (snap) => {
             const container = document.getElementById('promo_banners');
             const data = snap.val();
+            cachedBannersData = data ? Object.values(data) : [];
             if (!data) { container.innerHTML = `<div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div>`; return; }
             container.innerHTML = '';
             Object.values(data).forEach(bnr => {
@@ -1228,12 +1406,14 @@
                         <div style="font-size:13px; opacity:0.92;">${descText}</div>
                     </a>`;
             });
+            if (activeBottomTab === 'search') renderSearchResults();
         });
 
         onValue(ref(db, 'special_modules'), (snap) => {
             const data = snap.val();
             cachedSectionData.special_modules = data ? Object.values(data).filter(i => i.active !== false) : [];
             renderFourColSection('special_modules', true);
+            if (activeBottomTab === 'search') renderSearchResults();
         });
 
         onValue(ref(db, 'unlimited_reviews'), (snap) => {
