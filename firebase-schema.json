@@ -5,7 +5,7 @@
     "enable_email_password": true,
     "enable_signup": true,
     "enable_google_login": false,
-    "enable_guest_mode": false
+    "enable_guest_login": false
   },
   "swadesh_profile": {
     "app_title": "স্বদেশ সেবা",
