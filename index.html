@@ -598,4 +598,307 @@
                 if (serviceHistoryStack.length > 1) {
                     serviceHistoryStack.pop();
                     const prev = serviceHistoryStack[serviceHistoryStack.length - 1];
-                    document.getElementById('active-service-title').innerText =
+                    document.getElementById('active-service-title').innerText = prev.title;
+                    iframe.src = prev.url;
+                    updateHistoryIndicator();
+                    return;
+                } else {
+                    window.closeServiceViewer();
+                    return;
+                }
+            }
+
+            // ড্যাশবোর্ডে থাকলে ব্রাউজার/অ্যাপ হিস্ট্রিতে এক ধাপ পেছনে যাবে (অ্যাপ বন্ধ করবে না)
+            if (window.history.length > 1) {
+                window.history.back();
+            }
+            updateHistoryIndicator();
+        };
+
+        // নোটিফিকেশন পারমিশন প্রম্পটে অ্যাপ ক্র্যাশ/বন্ধ হওয়া প্রতিরোধে নিরাপদ হ্যান্ডলিং
+        // ওপেন করার সাথে সাথে requestPermissions কল করা হয় না; Don't allow করলেও অ্যাপ স্বাভাবিকভাবে চলে
+        function initNativePushNotifications() {
+            try {
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
+                    const { PushNotifications } = window.Capacitor.Plugins;
+                    if (typeof PushNotifications.addListener === 'function') {
+                        PushNotifications.addListener('registration', (token) => {
+                            try {
+                                console.log('FCM Token: ' + (token && token.value ? token.value : ''));
+                            } catch (_) {}
+                        });
+                        PushNotifications.addListener('pushNotificationReceived', (notification) => {
+                            try {
+                                const title = (notification && notification.title) || 'স্বদেশ সেবা';
+                                const body = (notification && notification.body) || '';
+                                alert(`${title}\n${body}`);
+                            } catch (_) {}
+                        });
+                    }
+                }
+            } catch (_) {}
+        }
+        window.addEventListener('DOMContentLoaded', initNativePushNotifications);
+
+        setTimeout(() => {
+            splashFinished = true;
+            if (authChecked) {
+                hideSplashAndRoute();
+            }
+        }, 1800);
+
+        // সেফটি ফব্যাক: ৫ সেকেন্ডের মধ্যে Auth চেক না হলেও স্ক্রিন লোডিংয়ে আটকে রাখবে না
+        setTimeout(() => {
+            splashFinished = true;
+            authChecked = true;
+            hideSplashAndRoute();
+        }, 5000);
+
+        function hideSplashAndRoute() {
+            const splash = document.getElementById('splash-screen');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    routeScreen();
+                }, 450);
+            } else {
+                routeScreen();
+            }
+        }
+
+        function routeScreen() {
+            if (!splashFinished) return;
+            const authScreen = document.getElementById('auth-screen');
+            const mainScreen = document.getElementById('main-app-screen');
+            const verifiedBadge = document.getElementById('email-verified-badge');
+            const savedEmail = localStorage.getItem('swadesh_saved_email');
+
+            if (currentUserState || savedEmail) {
+                authScreen.style.display = 'none';
+                mainScreen.style.display = 'block';
+
+                const isAnonymous = currentUserState ? currentUserState.isAnonymous : false;
+                const displayEmail = currentUserState
+                    ? (isAnonymous ? "অতিথি ব্যবহারকারী (Guest)" : (currentUserState.email || savedEmail))
+                    : savedEmail;
+
+                document.getElementById('prof-email').innerText = displayEmail;
+
+                const isEmailProvider = !isAnonymous && (
+                    (currentUserState && currentUserState.providerData && currentUserState.providerData.some(p => p.providerId === 'password')) ||
+                    Boolean(savedEmail)
+                );
+
+                // ইমেইল দিয়ে লগইন করলে প্রোফাইলে ভেরিফাইড টিক যুক্ত থাকবে
+                if (isEmailProvider) {
+                    verifiedBadge.classList.add('active');
+                } else {
+                    verifiedBadge.classList.remove('active');
+                }
+            } else {
+                mainScreen.style.display = 'none';
+                authScreen.style.display = 'flex';
+                verifiedBadge.classList.remove('active');
+            }
+        }
+
+        // ফায়ারবেস থেকে লগইন ইন্টারফেস কন্ট্রোল (auth_config)
+        onValue(ref(db, 'auth_config'), (snap) => {
+            const cfg = snap.val();
+            if (!cfg) return;
+
+            if (cfg.welcome_title) document.getElementById('auth-ui-title').innerText = cfg.welcome_title;
+            if (cfg.welcome_subtitle) document.getElementById('auth-ui-sub').innerText = cfg.welcome_subtitle;
+
+            const emailModule = document.getElementById('email-password-module');
+            emailModule.style.display = (cfg.enable_email_password === false) ? 'none' : 'block';
+
+            const signupTab = document.getElementById('tab-signup');
+            if (cfg.enable_signup === false) {
+                signupTab.style.display = 'none';
+                document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr';
+            } else {
+                signupTab.style.display = 'block';
+                document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr 1fr';
+            }
+
+            const googleBtn = document.getElementById('btn-google-login');
+            const guestBtn = document.getElementById('btn-guest-login');
+            const divider = document.getElementById('extra-auth-divider');
+
+            googleBtn.style.display = cfg.enable_google_login ? 'flex' : 'none';
+            guestBtn.style.display = cfg.enable_guest_login ? 'flex' : 'none';
+            divider.style.display = (cfg.enable_google_login || cfg.enable_guest_login) ? 'block' : 'none';
+        });
+
+        window.switchAuthMode = (mode) => {
+            authMode = mode;
+            document.getElementById('auth-error').innerText = '';
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
+            document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'লগইন করুন' : 'নতুন অ্যাকাউন্ট তৈরি করুন';
+        };
+
+        window.submitAuthForm = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const errorBox = document.getElementById('auth-error');
+            errorBox.innerText = 'যাচাই করা হচ্ছে...';
+
+            setPersistence(auth, browserLocalPersistence)
+                .catch(() => {})
+                .then(() => {
+                    if (authMode === 'signup') {
+                        return createUserWithEmailAndPassword(auth, email, password);
+                    } else {
+                        return signInWithEmailAndPassword(auth, email, password);
+                    }
+                })
+                .then((userCredential) => {
+                    const signedEmail = (userCredential && userCredential.user && userCredential.user.email) || email;
+                    if (signedEmail) {
+                        localStorage.setItem('swadesh_saved_email', signedEmail);
+                    }
+                    errorBox.innerText = '';
+                })
+                .catch(err => {
+                    errorBox.innerText = authMode === 'signup'
+                        ? "সাইন-আপ ত্রুটি: " + err.message
+                        : "ইমেইল বা পাসওয়ার্ড সঠিক নয়!";
+                });
+        };
+
+        window.loginWithGoogle = () => {
+            setPersistence(auth, browserLocalPersistence).catch(() => {});
+            signInWithPopup(auth, new GoogleAuthProvider())
+                .then((res) => {
+                    if (res && res.user && res.user.email) {
+                        localStorage.setItem('swadesh_saved_email', res.user.email);
+                    }
+                })
+                .catch(err => document.getElementById('auth-error').innerText = err.message);
+        };
+
+        window.loginAsGuest = () => {
+            setPersistence(auth, browserLocalPersistence).catch(() => {});
+            signInAnonymously(auth)
+                .catch(err => document.getElementById('auth-error').innerText = err.message);
+        };
+
+        window.logoutUser = () => {
+            localStorage.removeItem('swadesh_saved_email');
+            signOut(auth);
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            currentUserState = user;
+            if (user && user.email) {
+                localStorage.setItem('swadesh_saved_email', user.email);
+            }
+            authChecked = true;
+            if (splashFinished) {
+                hideSplashAndRoute();
+            }
+        });
+
+        // ৪ কলাম + মোর বাটন ইঞ্জিন (ডিফল্ট কালার ছাড়া, পোস্টের bg_color অনুযায়ী রঙ)
+        const MAX_VISIBLE_CARDS = 12;
+        const expandedState = { primary_services: false, special_modules: false };
+        const cachedSectionData = { primary_services: [], special_modules: [] };
+
+        function renderFourColSection(sectionId, showBadge = false) {
+            const container = document.getElementById(sectionId);
+            const moreContainer = document.getElementById(`${sectionId}_more`);
+            const items = cachedSectionData[sectionId];
+            const isExpanded = expandedState[sectionId];
+
+            container.innerHTML = '';
+            moreContainer.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                container.innerHTML = `<div class="empty-slot">ফায়ারবেস থেকে কার্ড যুক্ত করুন</div>`;
+                return;
+            }
+
+            const visibleItems = isExpanded ? items : items.slice(0, MAX_VISIBLE_CARDS);
+            visibleItems.forEach(item => {
+                const badgeHtml = (showBadge && item.badge) ? `<span class="mini-badge">${item.badge}</span>` : '';
+                const bgStyle = item.bg_color ? `background-color: ${item.bg_color}; color: ${item.text_color || '#ffffff'};` : `color: ${item.text_color || 'inherit'};`;
+                const safeTitle = (item.title || '').replace(/"/g, '&quot;');
+                const safeLink = (item.link || '#').replace(/"/g, '&quot;');
+
+                container.innerHTML += `
+                    <a href="${safeLink}" onclick="event.preventDefault(); openServiceStep('${safeTitle}', '${safeLink}');" class="grid-card-item" style="${bgStyle}">
+                        ${badgeHtml}
+                        <div class="card-icon-box">${item.icon || '📌'}</div>
+                        <div class="card-title-text">${item.title || ''}</div>
+                    </a>`;
+            });
+
+            if (items.length > MAX_VISIBLE_CARDS) {
+                const hiddenCount = items.length - MAX_VISIBLE_CARDS;
+                moreContainer.innerHTML = `
+                    <button class="more-toggle-btn" onclick="toggleSectionMore('${sectionId}', ${showBadge})">
+                        ${isExpanded ? 'সংক্ষিপ্ত করুন ▲' : `আরও দেখুন (+${hiddenCount}টি) ▼`}
+                    </button>`;
+            }
+        }
+
+        window.toggleSectionMore = (sectionId, showBadge) => {
+            expandedState[sectionId] = !expandedState[sectionId];
+            renderFourColSection(sectionId, showBadge);
+        };
+
+        onValue(ref(db, 'primary_services'), (snap) => {
+            const data = snap.val();
+            cachedSectionData.primary_services = data ? Object.values(data).filter(i => i.active !== false) : [];
+            renderFourColSection('primary_services', false);
+        });
+
+        onValue(ref(db, 'promo_banners'), (snap) => {
+            const container = document.getElementById('promo_banners');
+            const data = snap.val();
+            if (!data) { container.innerHTML = `<div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div>`; return; }
+            container.innerHTML = '';
+            Object.values(data).forEach(bnr => {
+                const bannerStyle = bnr.bg_color ? `background-color: ${bnr.bg_color}; color: ${bnr.text_color || '#ffffff'};` : `color: ${bnr.text_color || 'inherit'};`;
+                const safeTitle = (bnr.title || '').replace(/"/g, '&quot;');
+                const safeLink = (bnr.link || '#').replace(/"/g, '&quot;');
+                const descText = bnr.desc || bnr.subtitle || '';
+
+                container.innerHTML += `
+                    <a href="${safeLink}" onclick="event.preventDefault(); openServiceStep('${safeTitle}', '${safeLink}');" class="banner-card" style="${bannerStyle}">
+                        <div style="font-size:17px; font-weight:700; margin-bottom:4px;">${bnr.title || ''}</div>
+                        <div style="font-size:13px; opacity:0.92;">${descText}</div>
+                    </a>`;
+            });
+        });
+
+        onValue(ref(db, 'special_modules'), (snap) => {
+            const data = snap.val();
+            cachedSectionData.special_modules = data ? Object.values(data).filter(i => i.active !== false) : [];
+            renderFourColSection('special_modules', true);
+        });
+
+        onValue(ref(db, 'unlimited_reviews'), (snap) => {
+            const container = document.getElementById('unlimited_reviews');
+            const data = snap.val();
+            if (!data) { container.innerHTML = `<div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div>`; return; }
+            container.innerHTML = '';
+            Object.values(data).reverse().forEach(rev => {
+                const reviewerName = rev.user || rev.name || 'ব্যবহারকারী';
+                container.innerHTML += `
+                    <div class="clean-surface review-card">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
+                            <span style="font-weight:700; color:var(--text-dark);">${reviewerName} &nbsp; ${rev.rating || ''}</span>
+                            <span style="color:var(--text-muted); font-size:11px;">${rev.date || ''}</span>
+                        </div>
+                        <div style="font-size:13px; color:var(--text-dark); line-height:1.5;">${rev.comment || ''}</div>
+                    </div>`;
+            });
+        });
+    </script>
+</body>
+</html>
