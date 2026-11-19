@@ -165,8 +165,18 @@
             outline: none;
         }
 
+        .clean-input:disabled {
+            background: var(--surface-light);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
         .clean-input:focus {
             border-color: var(--brand-accent);
+        }
+
+        .optional-signup-fields {
+            display: none;
         }
 
         .primary-submit-btn {
@@ -226,13 +236,46 @@
             background-color: var(--bg-white);
         }
 
-        /* ফায়ারবেজ-স্টাইল ওয়েলকাম হেডার (হোমপেজের হেডারে ইমেইল দেখানো হবে না) */
+        /* একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার (বামে প্রোফাইল ছবি, ডানে ওয়েলকাম টেক্সট ও ভেরিফাইড টিক; নিচে দ্বিতীয় বক্স বা লগআউট নেই) */
         .welcome-top-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 14px 16px;
-            margin-bottom: 14px;
+            margin-bottom: 20px;
             background: var(--surface-light);
             border: 1px solid var(--border-light);
             border-radius: 14px;
+        }
+
+        .header-profile-avatar-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1.5px solid #cbd5e1;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .header-profile-avatar-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .welcome-text-block {
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
         }
 
         .welcome-greeting-line {
@@ -243,7 +286,7 @@
         }
 
         .welcome-hello-text {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 700;
             line-height: 1.25;
             color: var(--text-dark);
@@ -260,32 +303,6 @@
             font-weight: 600;
         }
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            margin-bottom: 18px;
-            gap: 8px;
-        }
-
-        .profile-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
-        .profile-avatar {
-            width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-            border: 1.5px solid #cbd5e1;
-            background: var(--bg-white);
-            display: flex; align-items: center; justify-content: center; font-size: 20px;
-        }
-
-        .profile-name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
         .verified-badge {
             display: none;
             align-items: center;
@@ -298,17 +315,11 @@
             font-weight: 700;
             border-radius: 50%;
             line-height: 1;
+            flex-shrink: 0;
         }
 
         .verified-badge.active {
             display: inline-flex;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            flex-shrink: 0;
         }
 
         .logout-btn {
@@ -349,7 +360,46 @@
 
         .me-profile-card {
             padding: 18px 16px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
+        }
+
+        .me-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .me-avatar-large {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 1.5px solid #cbd5e1;
+            background: var(--bg-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .me-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-pick-btn {
+            padding: 7px 12px;
+            border-radius: 9px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .me-user-name-row {
@@ -359,13 +409,27 @@
             font-size: 18px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .me-user-email {
             font-size: 13px;
             color: var(--text-muted);
             margin-top: 3px;
+        }
+
+        .me-meta-info {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .edit-profile-card {
+            padding: 16px;
+            margin-bottom: 14px;
         }
 
         .settings-panel-header {
@@ -642,6 +706,9 @@
 </head>
 <body>
 
+    <!-- ফোন থেকে প্রোফাইল ছবি সিলেক্ট করার হিডেন ফাইল ইনপুট -->
+    <input type="file" id="phone-photo-file-input" accept="image/*" style="display: none;" onchange="handlePhonePhotoSelected(event)">
+
     <!-- স্প্ল্যাশ স্ক্রিন -->
     <div id="splash-screen">
         <div class="swadesh-brand-logo" aria-label="স্বদেশ সেবা লোগো">
@@ -690,6 +757,24 @@
                         <label>পাসওয়ার্ড (ন্যূনতম ৬ অক্ষর)</label>
                         <input type="password" id="auth-password" class="clean-input" placeholder="••••••••" minlength="6" required>
                     </div>
+
+                    <!-- সাইন আপ সময়ে অপশনাল জন্ম তারিখ ও লিঙ্গ -->
+                    <div class="optional-signup-fields" id="signup-optional-fields">
+                        <div class="input-group">
+                            <label id="signup-dob-label">জন্ম তারিখ (ঐচ্ছিক)</label>
+                            <input type="date" id="signup-dob-input" class="clean-input">
+                        </div>
+                        <div class="input-group">
+                            <label id="signup-gender-label">লিঙ্গ (ঐচ্ছিক)</label>
+                            <select id="signup-gender-input" class="clean-input">
+                                <option value="">নির্বাচন করুন (ঐচ্ছিক)</option>
+                                <option value="পুরুষ">পুরুষ</option>
+                                <option value="মহিলা">মহিলা</option>
+                                <option value="অন্যান্য">অন্যান্য</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <button type="submit" class="primary-submit-btn" id="auth-submit-btn">লগইন করুন</button>
                 </form>
             </div>
@@ -709,32 +794,23 @@
 
     <!-- মেইন অ্যাপ ড্যাশবোর্ড (হোম পেজ) -->
     <main id="main-app-screen">
-        <!-- ফায়ারবেজের মতো ওয়েলকাম ব্যানার (হোমপেজের হেডারে ইমেইল থাকবে না) -->
+        <!-- একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার: বামে প্রোফাইল আইকন/ছবি, ডানে ওয়েলকাম টেক্সট -->
         <div class="welcome-top-banner" id="firebase-style-welcome">
-            <div class="welcome-greeting-line">
-                <div class="welcome-hello-text">
-                    <span id="welcome-prefix-label">Hello,</span>
-                    <span class="welcome-hello-name" id="welcome-user-name">স্বদেশ সেবা</span>
-                </div>
-                <span class="verified-badge" id="welcome-verified-badge" title="Verified">✓</span>
-            </div>
-            <div class="welcome-sub-text" id="welcome-back-sub">Welcome back to Swadesh Seba!</div>
-        </div>
+            <button type="button" class="header-profile-avatar-btn" id="header-profile-avatar-btn" onclick="openProfileTabFromHeader()" title="প্রোফাইল">
+                <span id="header-avatar-fallback">👤</span>
+            </button>
 
-        <header class="clean-surface profile-header">
-            <div class="profile-info">
-                <div class="profile-avatar">👤</div>
-                <div>
-                    <div class="profile-name-row">
-                        <span id="prof-title">স্বদেশ সেবা</span>
-                        <span class="verified-badge" id="email-verified-badge" title="Verified">✓</span>
+            <div class="welcome-text-block" onclick="openProfileTabFromHeader()">
+                <div class="welcome-greeting-line">
+                    <div class="welcome-hello-text">
+                        <span id="welcome-prefix-label">Hello,</span>
+                        <span class="welcome-hello-name" id="welcome-user-name">স্বদেশ সেবা</span>
                     </div>
+                    <span class="verified-badge" id="welcome-verified-badge" title="Verified">✓</span>
                 </div>
+                <div class="welcome-sub-text" id="welcome-back-sub">Welcome back to Swadesh Seba!</div>
             </div>
-            <div class="header-actions">
-                <button class="logout-btn" id="logout-btn-el" onclick="logoutUser()">লগআউট</button>
-            </div>
-        </header>
+        </div>
 
         <div class="section-block">
             <div class="section-label" id="label-primary-services">প্রধান সেবাসমূহ</div>
@@ -772,24 +848,67 @@
         </div>
     </section>
 
-    <!-- আলাদা প্রোফাইল / মি (Me) পেজ (রেজিস্টার/লগইন করা জিমেইল/ইমেইল এখানে যুক্ত ও প্রদর্শিত হবে) -->
+    <!-- আলাদা প্রোফাইল / মি (Me) পেজ: এডিট প্রোফাইল (নাম পরিবর্তন করা যাবে না, জন্ম তারিখ ও লিঙ্গ সিলেক্ট করা যাবে) ও লগআউট -->
     <section class="standalone-page-view" id="me-profile-page-view">
         <div class="congrats-banner-box" id="congrats-greeting-banner">
             স্বদেশ সেবার পক্ষ থেকে অভিনন্দন
         </div>
 
         <div class="clean-surface me-profile-card">
-            <div class="profile-avatar">👤</div>
+            <div class="me-top-row">
+                <div class="me-avatar-large" id="me-profile-avatar-box">
+                    <span id="me-avatar-fallback">👤</span>
+                </div>
+                <button type="button" class="photo-pick-btn" id="pick-phone-photo-btn" onclick="triggerPhonePhotoPicker()">
+                    ফোন থেকে ছবি সেট করুন
+                </button>
+            </div>
+
             <div class="me-user-name-row">
                 <span id="me-page-name">স্বদেশ সেবা</span>
                 <span class="verified-badge" id="me-verified-badge" title="Verified">✓</span>
             </div>
             <div class="me-user-email" id="me-page-email">user@email.com</div>
+
+            <div class="me-meta-info">
+                <div><strong id="me-dob-display-label">জন্ম তারিখ:</strong> <span id="me-dob-display-value">নির্ধারিত নয়</span></div>
+                <div><strong id="me-gender-display-label">লিঙ্গ:</strong> <span id="me-gender-display-value">নির্ধারিত নয়</span></div>
+            </div>
+        </div>
+
+        <!-- এডিট প্রোফাইল কার্ড: নাম পরিবর্তন করা যাবে না; জন্ম তারিখ ও লিঙ্গ সিলেক্ট করা যাবে -->
+        <div class="clean-surface edit-profile-card">
+            <div class="settings-panel-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+                <span class="settings-panel-title" id="edit-profile-heading">এডিট প্রোফাইল</span>
+            </div>
+
+            <div class="input-group">
+                <label id="edit-locked-name-label">নাম (পরিবর্তনযোগ্য নয়)</label>
+                <input type="text" id="edit-profile-locked-name" class="clean-input" disabled>
+            </div>
+
+            <div class="input-group">
+                <label id="edit-dob-label">জন্ম তারিখ</label>
+                <input type="date" id="edit-profile-dob" class="clean-input">
+            </div>
+
+            <div class="input-group">
+                <label id="edit-gender-label">লিঙ্গ</label>
+                <select id="edit-profile-gender" class="clean-input">
+                    <option value="">নির্বাচন করুন</option>
+                    <option value="পুরুষ">পুরুষ</option>
+                    <option value="মহিলা">মহিলা</option>
+                    <option value="অন্যান্য">অন্যান্য</option>
+                </select>
+            </div>
+
+            <button type="button" class="profile-save-btn" id="save-edit-profile-btn" onclick="saveEditedProfile()">প্রোফাইল আপডেট করুন</button>
+            <div class="settings-feedback" id="edit-profile-feedback"></div>
         </div>
 
         <div class="clean-surface" style="padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 13px; font-weight: 600;" id="me-account-status-label">অ্যাকাউন্ট স্ট্যাটাস</span>
-            <button class="logout-btn" onclick="logoutUser()">লগআউট</button>
+            <button class="logout-btn" id="me-logout-btn" onclick="logoutUser()">লগআউট</button>
         </div>
     </section>
 
@@ -818,13 +937,12 @@
                 </div>
             </div>
 
-            <!-- প্রোফাইল সেটিংস -->
+            <!-- প্রোফাইল সেটিংস (নাম পরিবর্তনযোগ্য নয়) -->
             <div class="profile-settings-box">
                 <div class="input-group" style="margin-bottom: 10px;">
-                    <label id="profile-name-label">প্রোফাইল সেটিংস (নাম / শিরোনাম)</label>
-                    <input type="text" id="profile-name-input" class="clean-input" placeholder="স্বদেশ সেবা">
+                    <label id="profile-name-label">প্রোফাইল নাম (পরিবর্তনযোগ্য নয়)</label>
+                    <input type="text" id="profile-name-input" class="clean-input" disabled>
                 </div>
-                <button type="button" class="profile-save-btn" id="profile-save-btn" onclick="saveProfileSettings()">প্রোফাইল সেভ করুন</button>
                 <div class="settings-feedback" id="settings-feedback-msg"></div>
             </div>
         </div>
@@ -902,7 +1020,7 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // স্থায়ী লগইন সেশন চালু রাখা (একবার লগইন করলে আর লগইন তথ্য চাওয়া হবে না)
+        // স্থায়ী লগইন সেশন চালু রাখা
         setPersistence(auth, browserLocalPersistence).catch(() => {});
 
         let authMode = 'login';
@@ -916,8 +1034,10 @@
         // সেটিংস ও ইউজার প্রোফাইল স্টেট
         let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
         let currentLang = localStorage.getItem('swadesh_lang') || 'bn';
-        let savedProfileTitle = localStorage.getItem('swadesh_profile_title') || 'স্বদেশ সেবা';
-        let savedUserName = localStorage.getItem('swadesh_user_name') || '';
+        let savedUserName = localStorage.getItem('swadesh_user_name') || 'স্বদেশ সেবা';
+        let savedDob = localStorage.getItem('swadesh_user_dob') || '';
+        let savedGender = localStorage.getItem('swadesh_user_gender') || '';
+        let savedProfilePhoto = localStorage.getItem('swadesh_user_photo') || '';
 
         const uiTexts = {
             bn: {
@@ -931,9 +1051,7 @@
                 lightMode: 'লাইট মোড',
                 darkMode: 'ডার্ক মোড',
                 langLabel: 'ভাষা / Language',
-                profileLabel: 'প্রোফাইল সেটিংস (নাম / শিরোনাম)',
-                saveProfile: 'প্রোফাইল সেভ করুন',
-                profileSaved: 'প্রোফাইল সেটিংস সেভ হয়েছে',
+                profileLabel: 'প্রোফাইল নাম (পরিবর্তনযোগ্য নয়)',
                 navHome: 'হোম',
                 navSearch: 'সার্চ বক্স',
                 navMe: 'প্রোফাইল মি',
@@ -946,7 +1064,15 @@
                 welcomeSub: 'Welcome back to Swadesh Seba!',
                 exitQuestion: 'আপনি কি অ্যাপ থেকে বের হতে চান?',
                 exitYes: 'হ্যাঁ',
-                exitNo: 'না'
+                exitNo: 'না',
+                pickPhoto: 'ফোন থেকে ছবি সেট করুন',
+                editProfileTitle: 'এডিট প্রোফাইল',
+                lockedNameLabel: 'নাম (পরিবর্তনযোগ্য নয়)',
+                dobLabel: 'জন্ম তারিখ',
+                genderLabel: 'লিঙ্গ',
+                updateProfileBtn: 'প্রোফাইল আপডেট করুন',
+                profileUpdated: 'প্রোফাইল তথ্য আপডেট হয়েছে',
+                notSet: 'নির্ধারিত নয়'
             },
             en: {
                 logout: 'Logout',
@@ -959,9 +1085,7 @@
                 lightMode: 'Light Mode',
                 darkMode: 'Dark Mode',
                 langLabel: 'Language',
-                profileLabel: 'Profile Settings (Name / Title)',
-                saveProfile: 'Save Profile',
-                profileSaved: 'Profile settings saved',
+                profileLabel: 'Profile Name (Not Editable)',
                 navHome: 'Home',
                 navSearch: 'Search',
                 navMe: 'Profile Me',
@@ -974,7 +1098,15 @@
                 welcomeSub: 'Welcome back to Swadesh Seba!',
                 exitQuestion: 'Do you want to exit the app?',
                 exitYes: 'Yes',
-                exitNo: 'No'
+                exitNo: 'No',
+                pickPhoto: 'Set Photo from Phone',
+                editProfileTitle: 'Edit Profile',
+                lockedNameLabel: 'Name (Not Editable)',
+                dobLabel: 'Date of Birth',
+                genderLabel: 'Gender',
+                updateProfileBtn: 'Update Profile',
+                profileUpdated: 'Profile updated',
+                notSet: 'Not set'
             }
         };
 
@@ -999,7 +1131,7 @@
             if (enBtn) enBtn.classList.toggle('active', currentLang === 'en');
 
             const t = uiTexts[currentLang];
-            const logoutEl = document.getElementById('logout-btn-el');
+            const meLogoutEl = document.getElementById('me-logout-btn');
             const pSec = document.getElementById('label-primary-services');
             const bSec = document.getElementById('label-promo-banners');
             const sSec = document.getElementById('label-special-modules');
@@ -1010,7 +1142,6 @@
             const dBtn = document.getElementById('btn-theme-dark');
             const lgLbl = document.getElementById('lang-setting-label');
             const prLbl = document.getElementById('profile-name-label');
-            const prSave = document.getElementById('profile-save-btn');
             const nHome = document.getElementById('nav-label-home');
             const nSearch = document.getElementById('nav-label-search');
             const nMe = document.getElementById('nav-label-me');
@@ -1024,8 +1155,14 @@
             const exQ = document.getElementById('exit-confirm-question');
             const exYes = document.getElementById('exit-yes-btn');
             const exNo = document.getElementById('exit-no-btn');
+            const pickPhotoBtn = document.getElementById('pick-phone-photo-btn');
+            const editHead = document.getElementById('edit-profile-heading');
+            const lockedNameLbl = document.getElementById('edit-locked-name-label');
+            const dobLbl = document.getElementById('edit-dob-label');
+            const genderLbl = document.getElementById('edit-gender-label');
+            const updBtn = document.getElementById('save-edit-profile-btn');
 
-            if (logoutEl) logoutEl.innerText = t.logout;
+            if (meLogoutEl) meLogoutEl.innerText = t.logout;
             if (pSec) pSec.innerText = t.primaryServices;
             if (bSec) bSec.innerText = t.promoBanners;
             if (sSec) sSec.innerText = t.specialModules;
@@ -1036,7 +1173,6 @@
             if (dBtn) dBtn.innerText = t.darkMode;
             if (lgLbl) lgLbl.innerText = t.langLabel;
             if (prLbl) prLbl.innerText = t.profileLabel;
-            if (prSave) prSave.innerText = t.saveProfile;
             if (nHome) nHome.innerText = t.navHome;
             if (nSearch) nSearch.innerText = t.navSearch;
             if (nMe) nMe.innerText = t.navMe;
@@ -1050,33 +1186,92 @@
             if (exQ) exQ.innerText = t.exitQuestion;
             if (exYes) exYes.innerText = t.exitYes;
             if (exNo) exNo.innerText = t.exitNo;
+            if (pickPhotoBtn) pickPhotoBtn.innerText = t.pickPhoto;
+            if (editHead) editHead.innerText = t.editProfileTitle;
+            if (lockedNameLbl) lockedNameLbl.innerText = t.lockedNameLabel;
+            if (dobLbl) dobLbl.innerText = t.dobLabel;
+            if (genderLbl) genderLbl.innerText = t.genderLabel;
+            if (updBtn) updBtn.innerText = t.updateProfileBtn;
+
+            syncProfileUI();
         };
 
-        function syncProfileTexts() {
-            const profTitleEl = document.getElementById('prof-title');
-            const meNameEl = document.getElementById('me-page-name');
-            const welcomeNameEl = document.getElementById('welcome-user-name');
-            const profInput = document.getElementById('profile-name-input');
-            const activeDisplayName = savedUserName || savedProfileTitle || 'স্বদেশ সেবা';
+        function applyAvatarImageToContainers(dataUrl) {
+            const headerBtn = document.getElementById('header-profile-avatar-btn');
+            const meBox = document.getElementById('me-profile-avatar-box');
 
-            if (profTitleEl) profTitleEl.innerText = activeDisplayName;
-            if (meNameEl) meNameEl.innerText = activeDisplayName;
-            if (welcomeNameEl) welcomeNameEl.innerText = activeDisplayName;
-            if (profInput && document.activeElement !== profInput) {
-                profInput.value = activeDisplayName;
+            if (dataUrl) {
+                if (headerBtn) headerBtn.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
+                if (meBox) meBox.innerHTML = `<img src="${dataUrl}" alt="Profile">`;
+            } else {
+                if (headerBtn) headerBtn.innerHTML = `<span id="header-avatar-fallback">👤</span>`;
+                if (meBox) meBox.innerHTML = `<span id="me-avatar-fallback">👤</span>`;
             }
         }
 
-        window.saveProfileSettings = () => {
-            const input = document.getElementById('profile-name-input');
-            const fb = document.getElementById('settings-feedback-msg');
-            const nextTitle = (input && input.value.trim()) ? input.value.trim() : 'স্বদেশ সেবা';
-            savedProfileTitle = nextTitle;
-            savedUserName = nextTitle;
-            localStorage.setItem('swadesh_profile_title', savedProfileTitle);
-            localStorage.setItem('swadesh_user_name', savedUserName);
-            syncProfileTexts();
-            if (fb) fb.innerText = uiTexts[currentLang].profileSaved;
+        window.triggerPhonePhotoPicker = () => {
+            const fileInput = document.getElementById('phone-photo-file-input');
+            if (fileInput) fileInput.click();
+        };
+
+        window.handlePhonePhotoSelected = (event) => {
+            const file = event && event.target && event.target.files && event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgData = e && e.target ? e.target.result : '';
+                if (typeof imgData === 'string' && imgData.startsWith('data:image/')) {
+                    savedProfilePhoto = imgData;
+                    try {
+                        localStorage.setItem('swadesh_user_photo', savedProfilePhoto);
+                    } catch (_) {}
+                    applyAvatarImageToContainers(savedProfilePhoto);
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function syncProfileUI() {
+            const t = uiTexts[currentLang];
+            const activeName = savedUserName || 'স্বদেশ সেবা';
+            const meNameEl = document.getElementById('me-page-name');
+            const welcomeNameEl = document.getElementById('welcome-user-name');
+            const lockedNameInput = document.getElementById('edit-profile-locked-name');
+            const settingsNameInput = document.getElementById('profile-name-input');
+            const dobInput = document.getElementById('edit-profile-dob');
+            const genderSelect = document.getElementById('edit-profile-gender');
+            const dobDisplay = document.getElementById('me-dob-display-value');
+            const genderDisplay = document.getElementById('me-gender-display-value');
+
+            if (meNameEl) meNameEl.innerText = activeName;
+            if (welcomeNameEl) welcomeNameEl.innerText = activeName;
+            if (lockedNameInput) lockedNameInput.value = activeName;
+            if (settingsNameInput) settingsNameInput.value = activeName;
+            if (dobInput) dobInput.value = savedDob;
+            if (genderSelect) genderSelect.value = savedGender;
+            if (dobDisplay) dobDisplay.innerText = savedDob || t.notSet;
+            if (genderDisplay) genderDisplay.innerText = savedGender || t.notSet;
+
+            applyAvatarImageToContainers(savedProfilePhoto);
+        }
+
+        window.saveEditedProfile = () => {
+            const dobInput = document.getElementById('edit-profile-dob');
+            const genderSelect = document.getElementById('edit-profile-gender');
+            const fb = document.getElementById('edit-profile-feedback');
+
+            savedDob = dobInput ? dobInput.value : savedDob;
+            savedGender = genderSelect ? genderSelect.value : savedGender;
+
+            localStorage.setItem('swadesh_user_dob', savedDob);
+            localStorage.setItem('swadesh_user_gender', savedGender);
+
+            syncProfileUI();
+            if (fb) fb.innerText = uiTexts[currentLang].profileUpdated;
+        };
+
+        window.openProfileTabFromHeader = () => {
+            window.switchBottomTab('me');
         };
 
         window.switchBottomTab = (tabName) => {
@@ -1100,9 +1295,9 @@
             document.getElementById('nav-btn-me').classList.toggle('active', activeBottomTab === 'me');
             document.getElementById('nav-btn-settings').classList.toggle('active', activeBottomTab === 'settings');
 
-            const fb = document.getElementById('settings-feedback-msg');
-            if (fb) fb.innerText = '';
-            syncProfileTexts();
+            const editFb = document.getElementById('edit-profile-feedback');
+            if (editFb) editFb.innerText = '';
+            syncProfileUI();
             if (activeBottomTab === 'search') {
                 renderSearchResults();
             }
@@ -1112,7 +1307,7 @@
         function applySavedPreferences() {
             window.setAppTheme(currentTheme);
             window.setAppLanguage(currentLang);
-            syncProfileTexts();
+            syncProfileUI();
         }
         window.addEventListener('DOMContentLoaded', applySavedPreferences);
 
@@ -1257,9 +1452,7 @@
                     } else if (currentHref.includes('#home') || currentHref.includes('back=home') || currentHref.includes('dashboard=true')) {
                         window.closeServiceViewer();
                     }
-                } catch (_) {
-                    // ক্রস-অরিজিন পেজ হলে মডিউলের নিজস্ব ব্যাক বাটনই পেজ হ্যান্ডেল করবে
-                }
+                } catch (_) {}
             });
         }
 
@@ -1294,7 +1487,6 @@
             }
         }, 1800);
 
-        // সেফটি ফব্যাক: ৫ সেকেন্ডের মধ্যে Auth চেক না হলেও স্ক্রিন লোডিংয়ে আটকে রাখবে না
         setTimeout(() => {
             splashFinished = true;
             authChecked = true;
@@ -1319,7 +1511,6 @@
             const authScreen = document.getElementById('auth-screen');
             const footer = document.getElementById('app-footer');
             const bottomNav = document.getElementById('bottom-nav-bar');
-            const verifiedBadge = document.getElementById('email-verified-badge');
             const meVerifiedBadge = document.getElementById('me-verified-badge');
             const welcomeVerifiedBadge = document.getElementById('welcome-verified-badge');
             const savedEmail = localStorage.getItem('swadesh_saved_email');
@@ -1339,7 +1530,7 @@
                 } else if (isAnonymous) {
                     savedUserName = "অতিথি ব্যবহারকারী";
                 }
-                syncProfileTexts();
+                syncProfileUI();
 
                 // রেজিস্টার/লগইন করা জিমেইল/ইমেইল প্রোফাইল (মি) পেজে যুক্ত হবে; হোমপেজের হেডারে থাকবে না
                 const meEmailEl = document.getElementById('me-page-email');
@@ -1352,11 +1543,9 @@
 
                 // রেজিস্টার/লগইন করার পর নামের পাশে ব্লু ভেরিফাইড টিক
                 if (isEmailProvider) {
-                    verifiedBadge.classList.add('active');
                     if (meVerifiedBadge) meVerifiedBadge.classList.add('active');
                     if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.add('active');
                 } else {
-                    verifiedBadge.classList.remove('active');
                     if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
                     if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.remove('active');
                 }
@@ -1373,7 +1562,6 @@
                 if (bottomNav) bottomNav.style.display = 'none';
                 if (footer) footer.style.display = 'block';
                 authScreen.style.display = 'flex';
-                verifiedBadge.classList.remove('active');
                 if (meVerifiedBadge) meVerifiedBadge.classList.remove('active');
                 if (welcomeVerifiedBadge) welcomeVerifiedBadge.classList.remove('active');
             }
@@ -1394,6 +1582,7 @@
             if (cfg.enable_signup === false) {
                 signupTab.style.display = 'none';
                 document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr';
+                if (authMode === 'signup') window.switchAuthMode('login');
             } else {
                 signupTab.style.display = 'block';
                 document.getElementById('auth-tabs-box').style.gridTemplateColumns = '1fr 1fr';
@@ -1414,6 +1603,11 @@
             document.getElementById('tab-login').classList.toggle('active', mode === 'login');
             document.getElementById('tab-signup').classList.toggle('active', mode === 'signup');
             document.getElementById('auth-submit-btn').innerText = mode === 'login' ? 'লগইন করুন' : 'নতুন অ্যাকাউন্ট তৈরি করুন';
+
+            const optionalBox = document.getElementById('signup-optional-fields');
+            if (optionalBox) {
+                optionalBox.style.display = mode === 'signup' ? 'block' : 'none';
+            }
         };
 
         window.submitAuthForm = (e) => {
@@ -1427,11 +1621,22 @@
 
             if (enteredName) {
                 savedUserName = enteredName;
-                savedProfileTitle = enteredName;
                 localStorage.setItem('swadesh_user_name', savedUserName);
-                localStorage.setItem('swadesh_profile_title', savedProfileTitle);
-                syncProfileTexts();
             }
+
+            if (authMode === 'signup') {
+                const dobVal = (document.getElementById('signup-dob-input') && document.getElementById('signup-dob-input').value) || '';
+                const genderVal = (document.getElementById('signup-gender-input') && document.getElementById('signup-gender-input').value) || '';
+                if (dobVal) {
+                    savedDob = dobVal;
+                    localStorage.setItem('swadesh_user_dob', savedDob);
+                }
+                if (genderVal) {
+                    savedGender = genderVal;
+                    localStorage.setItem('swadesh_user_gender', savedGender);
+                }
+            }
+            syncProfileUI();
 
             setPersistence(auth, browserLocalPersistence)
                 .catch(() => {})
@@ -1474,7 +1679,7 @@
                             savedUserName = res.user.displayName;
                             localStorage.setItem('swadesh_user_name', savedUserName);
                         }
-                        syncProfileTexts();
+                        syncProfileUI();
                     }
                 })
                 .catch(err => document.getElementById('auth-error').innerText = err.message);
@@ -1511,7 +1716,7 @@
             }
         });
 
-        // ৪ কলাম + মোর বাটন ইঞ্জিন (ডিফল্ট কালার ছাড়া, পোস্টের bg_color অনুযায়ী রঙ)
+        // ৪ কলাম + মোর বাটন ইঞ্জিন
         const MAX_VISIBLE_CARDS = 12;
         const expandedState = { primary_services: false, special_modules: false };
         const cachedSectionData = { primary_services: [], special_modules: [] };
