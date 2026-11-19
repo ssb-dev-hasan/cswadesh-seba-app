@@ -605,7 +605,6 @@
         }
         .section-label::before { content: "•"; color: var(--brand-accent); font-size: 18px; line-height: 1; }
 
-        /* কার্ডগুলোতে কোনো ডিফল্ট রঙ জোর করে দেওয়া হয়নি; পোস্টের bg_color অনুযায়ী রঙ বসবে */
         .four-col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
         .grid-card-item {
             padding: 12px 4px; text-align: center; text-decoration: none;
@@ -706,10 +705,8 @@
 </head>
 <body>
 
-    <!-- ফোন থেকে প্রোফাইল ছবি সিলেক্ট করার হিডেন ফাইল ইনপুট -->
     <input type="file" id="phone-photo-file-input" accept="image/*" style="display: none;" onchange="handlePhonePhotoSelected(event)">
 
-    <!-- স্প্ল্যাশ স্ক্রিন -->
     <div id="splash-screen">
         <div class="swadesh-brand-logo" aria-label="স্বদেশ সেবা লোগো">
             <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -723,7 +720,6 @@
         <div class="splash-subtitle">নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম</div>
     </div>
 
-    <!-- ফায়ারবেস-কন্ট্রোলড লগইন ও সাইন-আপ ইন্টারফেস -->
     <div id="auth-screen">
         <div class="clean-surface auth-box">
             <div class="auth-header">
@@ -758,7 +754,6 @@
                         <input type="password" id="auth-password" class="clean-input" placeholder="••••••••" minlength="6" required>
                     </div>
 
-                    <!-- সাইন আপ সময়ে অপশনাল জন্ম তারিখ ও লিঙ্গ -->
                     <div class="optional-signup-fields" id="signup-optional-fields">
                         <div class="input-group">
                             <label id="signup-dob-label">জন্ম তারিখ (ঐচ্ছিক)</label>
@@ -792,9 +787,7 @@
         </div>
     </div>
 
-    <!-- মেইন অ্যাপ ড্যাশবোর্ড (হোম পেজ) -->
     <main id="main-app-screen">
-        <!-- একটিমাত্র প্রোফাইল/ওয়েলকাম হেডার -->
         <div class="welcome-top-banner" id="firebase-style-welcome">
             <button type="button" class="header-profile-avatar-btn" id="header-profile-avatar-btn" onclick="openProfileTabFromHeader()" title="প্রোফাইল">
                 <span id="header-avatar-fallback">👤</span>
@@ -835,7 +828,6 @@
         </div>
     </main>
 
-    <!-- আলাদা সার্চ বক্স পেজ -->
     <section class="standalone-page-view" id="search-page-view">
         <div class="settings-panel-header">
             <span class="settings-panel-title" id="search-page-title">সার্চ বক্স</span>
@@ -848,7 +840,6 @@
         </div>
     </section>
 
-    <!-- আলাদা প্রোফাইল / মি (Me) পেজ -->
     <section class="standalone-page-view" id="me-profile-page-view">
         <div class="congrats-banner-box" id="congrats-greeting-banner">
             স্বদেশ সেবার পক্ষ থেকে অভিনন্দন
@@ -876,7 +867,6 @@
             </div>
         </div>
 
-        <!-- এডিট প্রোফাইল কার্ড: নাম পরিবর্তন করা যাবে না; জন্ম তারিখ ও লিঙ্গ সিলেক্ট করা যাবে -->
         <div class="clean-surface edit-profile-card">
             <div class="settings-panel-header" style="margin-bottom: 12px; padding-bottom: 8px;">
                 <span class="settings-panel-title" id="edit-profile-heading">এডিট প্রোফাইল</span>
@@ -912,14 +902,12 @@
         </div>
     </section>
 
-    <!-- আলাদা সেটিং গিয়ার বক্স পেজ -->
     <section class="standalone-page-view" id="settings-page-view">
         <div class="clean-surface" style="padding: 16px;">
             <div class="settings-panel-header">
                 <span class="settings-panel-title" id="settings-box-title">সেটিংস</span>
             </div>
 
-            <!-- থিম মোড: লাইট / ডার্ক -->
             <div class="settings-row">
                 <span class="settings-label" id="theme-setting-label">থিম মোড</span>
                 <div class="option-pill-group">
@@ -928,7 +916,6 @@
                 </div>
             </div>
 
-            <!-- ভাষা নির্বাচন: বাংলা / English -->
             <div class="settings-row">
                 <span class="settings-label" id="lang-setting-label">ভাষা / Language</span>
                 <div class="option-pill-group">
@@ -937,7 +924,6 @@
                 </div>
             </div>
 
-            <!-- প্রোফাইল সেটিংস (নাম পরিবর্তনযোগ্য নয়) -->
             <div class="profile-settings-box">
                 <div class="input-group" style="margin-bottom: 10px;">
                     <label id="profile-name-label">প্রোফাইল নাম (পরিবর্তনযোগ্য নয়)</label>
@@ -948,7 +934,6 @@
         </div>
     </section>
 
-    <!-- নিচের বটম নেভিগেশন আইকন বার -->
     <nav id="bottom-nav-bar" aria-label="Bottom Navigation">
         <button type="button" class="bottom-nav-btn active" id="nav-btn-home" onclick="switchBottomTab('home')">
             <span class="bottom-nav-icon">🏠</span>
@@ -968,17 +953,14 @@
         </button>
     </nav>
 
-    <!-- ফুটার কপিরাইট -->
     <footer class="app-footer-copyright" id="app-footer">
         &copy; ২০২৬ <strong>স্বদেশ সেবা</strong> • সর্বস্বত্ব সংরক্ষিত
     </footer>
 
-    <!-- অ্যাপ কন্টেইনার নিয়ন্ত্রিত ফুল-স্ক্রিন মডিউল ওভারলে -->
     <div id="fullscreen-module-overlay">
         <iframe id="fullscreen-module-iframe" class="fullscreen-module-iframe" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
     </div>
 
-    <!-- হোমপেজে ব্যাক বাটন চাপলে এক্সিট কনফার্মেশন বক্স -->
     <div id="exit-confirm-modal" role="dialog" aria-modal="true">
         <div class="clean-surface exit-confirm-box">
             <div class="exit-confirm-title" id="exit-confirm-question">আপনি কি অ্যাপ থেকে বের হতে চান?</div>
@@ -1005,7 +987,6 @@
             onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ফায়ারবেস প্রজেক্ট কনফিগারেশন (অপরিবর্তিত)
         const firebaseConfig = {
             apiKey: "AIzaSyAf7hn4_MIehUUUkg22tluO098ewn7I2Y0",
             authDomain: "swadesh-seba.firebaseapp.com",
@@ -1020,7 +1001,6 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
-        // স্থায়ী লগইন সেশন চালু রাখা
         setPersistence(auth, browserLocalPersistence).catch(() => {});
 
         let authMode = 'login';
@@ -1031,12 +1011,9 @@
         let activeBottomTab = 'home';
         let exitDialogOpen = false;
 
-        // ধাপে ধাপে (একটি একটি করে) ব্যাক হওয়ার জন্য নেভিগেশন স্ট্যাক
-        // প্রতিটি এন্ট্রি: { type: 'tab', tab: 'home'|'search'|'me'|'settings' } বা { type: 'module', title, url }
         let pageBackStack = [{ type: 'tab', tab: 'home' }];
         let isHandlingBackStep = false;
 
-        // সেটিংস ও ইউজার প্রোফাইল স্টেট
         let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
         let currentLang = localStorage.getItem('swadesh_lang') || 'bn';
         let savedUserName = localStorage.getItem('swadesh_user_name') || 'স্বদেশ সেবা';
@@ -1405,7 +1382,6 @@
             }
         };
 
-        // মডিউলে ক্লিক করলে অ্যাপ কন্টেইনারের ভেতরে পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে
         window.openServiceStep = (title, url) => {
             if (!url || url === '#') return;
             setExitDialogVisible(false);
@@ -1414,7 +1390,6 @@
             renderTopOfStack();
         };
 
-        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আগের পেজ/হোম পেজে নিয়ে যাবে
         window.closeServiceViewer = () => {
             if (pageBackStack.length > 1) {
                 pageBackStack.pop();
@@ -1424,7 +1399,6 @@
             renderTopOfStack();
         };
 
-        // ফোনের ব্যাক বাটন হ্যান্ডলিং: একটি একটি করে পেজ ব্যাকে আসবে; সবশেষে হোম পেজে এলে এক্সিট ডায়ালগ দেখাবে
         function handlePhoneBackAction() {
             if (isHandlingBackStep) return true;
             isHandlingBackStep = true;
@@ -1443,8 +1417,11 @@
                     return true;
                 }
 
-                // ইতিমধ্যে হোম পেজে থাকলে অ্যাপ সরাসরি বন্ধ না করে হ্যাঁ/না কনফার্মেশন দেখাবে
-                applyTabViewOnly('home');
+                // লগইন স্ক্রিনে থাকলে সরাসরি অ্যাপ না কেটে এক্সিট ডায়ালগ দেখাবে, নইলে হোমে গিয়ে এক্সিট ডায়ালগ
+                const authScreen = document.getElementById('auth-screen');
+                if (!authScreen || authScreen.style.display === 'none') {
+                    applyTabViewOnly('home');
+                }
                 setExitDialogVisible(true);
                 pushHistoryStep('home_guard');
                 return true;
@@ -1454,6 +1431,9 @@
                 }, 60);
             }
         }
+
+        // নেটিভ Android MainActivity / Capacitor থেকে সরাসরি কল করার জন্য
+        window.__swadeshHandleBack = handlePhoneBackAction;
 
         window.addEventListener('DOMContentLoaded', () => {
             try {
@@ -1474,7 +1454,6 @@
             handlePhoneBackAction();
         });
 
-        // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে ফেরার সিগন্যাল গ্রহণ
         window.addEventListener('message', (event) => {
             const data = event && event.data;
             if (data === 'CLOSE_MODULE' || data === 'BACK_TO_HOME' || (data && (data.action === 'closeModule' || data.action === 'backToHome'))) {
@@ -1482,7 +1461,6 @@
             }
         });
 
-        // মডিউলের iframe লোড/নেভিগেশন পর্যবেক্ষণ
         const moduleIframeEl = document.getElementById('fullscreen-module-iframe');
         if (moduleIframeEl) {
             moduleIframeEl.addEventListener('load', () => {
@@ -1495,7 +1473,6 @@
             });
         }
 
-        // নোটিফিকেশন পারমিশন প্রম্পটে নিরাপদ হ্যান্ডলিং
         function initNativePushNotifications() {
             try {
                 if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications) {
@@ -1602,7 +1579,6 @@
             }
         }
 
-        // ফায়ারবেস থেকে লগইন ইন্টারফেস কন্ট্রোল (auth_config)
         onValue(ref(db, 'auth_config'), (snap) => {
             const cfg = snap.val();
             if (!cfg) return;
@@ -1756,7 +1732,6 @@
             }
         });
 
-        // ৪ কলাম + মোর বাটন ইঞ্জিন
         const MAX_VISIBLE_CARDS = 12;
         const expandedState = { primary_services: false, special_modules: false };
         const cachedSectionData = { primary_services: [], special_modules: [] };
