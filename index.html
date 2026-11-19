@@ -18,6 +18,16 @@
             --verified-blue: #1d9bf0;
         }
 
+        body.dark-theme {
+            --bg-white: #0b1120;
+            --surface-light: #111827;
+            --border-light: #1f2937;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --brand-primary: #1e293b;
+            --brand-accent: #38bdf8;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -32,6 +42,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         .clean-surface {
@@ -220,11 +231,12 @@
             justify-content: space-between;
             padding: 14px 16px;
             margin-bottom: 10px;
+            gap: 8px;
         }
 
-        .profile-info { display: flex; align-items: center; gap: 12px; }
+        .profile-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
         .profile-avatar {
-            width: 46px; height: 46px; border-radius: 50%;
+            width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
             border: 1.5px solid #cbd5e1;
             background: var(--bg-white);
             display: flex; align-items: center; justify-content: center; font-size: 20px;
@@ -256,11 +268,125 @@
             display: inline-flex;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-shrink: 0;
+        }
+
+        .gear-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
         .logout-btn {
             background: #fef2f2;
             color: #dc2626;
             border: 1px solid #fecaca;
             padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+        }
+
+        /* সেটিং গিয়ার বক্স প্যানেল */
+        #settings-gear-panel {
+            display: none;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .settings-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .settings-panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .settings-close-btn {
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .settings-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .option-pill-group {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .option-pill-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-white);
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .option-pill-btn.active {
+            background: var(--brand-accent);
+            color: #ffffff;
+            border-color: var(--brand-accent);
+        }
+
+        .profile-settings-box {
+            padding-top: 12px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .profile-save-btn {
+            padding: 8px 14px;
+            border-radius: 9px;
+            border: none;
+            background: var(--brand-accent);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .settings-feedback {
+            font-size: 12px;
+            color: #0284c7;
+            margin-top: 8px;
+            min-height: 16px;
+            font-weight: 600;
         }
 
         /* প্রোফাইলের নিচে ব্যাক অ্যারো বার (শুধুমাত্র ড্যাশবোর্ডে দৃশ্যমান; মডিউল ওপেন থাকলে সম্পূর্ণ অদৃশ্য) */
@@ -454,36 +580,75 @@
                     <div style="font-size: 11px; color: var(--text-muted);" id="prof-email">user@email.com</div>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logoutUser()">লগআউট</button>
+            <div class="header-actions">
+                <button type="button" class="gear-btn" id="settings-gear-btn" onclick="toggleSettingsGearPanel()" title="সেটিংস">⚙️</button>
+                <button class="logout-btn" id="logout-btn-el" onclick="logoutUser()">লগআউট</button>
+            </div>
         </header>
 
-        <!-- প্রোফাইলের নিচে ব্যাক অ্যারো বাটন (শুধুমাত্র ড্যাশবোর্ডের জন্য; মডিউল ওপেন থাকলে অ্যাপের ব্যাক বাটন কাজ করবে না) -->
+        <!-- সেটিং গিয়ার বক্স -->
+        <section class="clean-surface" id="settings-gear-panel">
+            <div class="settings-panel-header">
+                <span class="settings-panel-title" id="settings-box-title">সেটিংস</span>
+                <button type="button" class="settings-close-btn" id="settings-close-btn" onclick="toggleSettingsGearPanel(false)">✕</button>
+            </div>
+
+            <!-- থিম মোড: ডার্ক / লাইট -->
+            <div class="settings-row">
+                <span class="settings-label" id="theme-setting-label">থিম মোড</span>
+                <div class="option-pill-group">
+                    <button type="button" class="option-pill-btn active" id="btn-theme-light" onclick="setAppTheme('light')">লাইট মোড</button>
+                    <button type="button" class="option-pill-btn" id="btn-theme-dark" onclick="setAppTheme('dark')">ডার্ক মোড</button>
+                </div>
+            </div>
+
+            <!-- ভাষা নির্বাচন: বাংলা / ইংলিশ -->
+            <div class="settings-row">
+                <span class="settings-label" id="lang-setting-label">ভাষা / Language</span>
+                <div class="option-pill-group">
+                    <button type="button" class="option-pill-btn active" id="btn-lang-bn" onclick="setAppLanguage('bn')">বাংলা</button>
+                    <button type="button" class="option-pill-btn" id="btn-lang-en" onclick="setAppLanguage('en')">English</button>
+                </div>
+            </div>
+
+            <!-- প্রোফাইল সেটিংস -->
+            <div class="profile-settings-box">
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <label id="profile-name-label">প্রোফাইল সেটিংস (নাম / শিরোনাম)</label>
+                    <input type="text" id="profile-name-input" class="clean-input" placeholder="স্বদেশ সেবা">
+                </div>
+                <button type="button" class="profile-save-btn" id="profile-save-btn" onclick="saveProfileSettings()">প্রোফাইল সেভ করুন</button>
+                <div class="settings-feedback" id="settings-feedback-msg"></div>
+            </div>
+        </section>
+
+        <!-- প্রোফাইলের নিচে ব্যাক অ্যারো বার (শুধুমাত্র ড্যাশবোর্ডের জন্য; মডিউল ওপেন থাকলে অ্যাপের ব্যাক বাটন কাজ করবে না) -->
         <div class="profile-back-bar" id="dashboard-back-bar">
             <button type="button" class="step-back-btn" id="step-back-btn" onclick="stepBackHistory()">
-                <span>←</span> ব্যাক
+                <span>←</span> <span id="back-btn-text">ব্যাক</span>
             </button>
             <span class="nav-history-indicator" id="nav-history-status">হোম ড্যাশবোর্ড</span>
         </div>
 
         <div class="section-block">
-            <div class="section-label">প্রধান সেবাসমূহ</div>
+            <div class="section-label" id="label-primary-services">প্রধান সেবাসমূহ</div>
             <section class="four-col-grid" id="primary_services"><div class="empty-slot">ফায়ারবেস ডাটাবেজের অপেক্ষায়...</div></section>
             <div id="primary_services_more"></div>
         </div>
 
         <div class="section-block">
-            <div class="section-label">বিশেষ ঘোষণা ও ব্যানার</div>
+            <div class="section-label" id="label-promo-banners">বিশেষ ঘোষণা ও ব্যানার</div>
             <section class="banner-wrapper" id="promo_banners"><div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div></section>
         </div>
 
         <div class="section-block">
-            <div class="section-label">বিশেষ মডিউল</div>
+            <div class="section-label" id="label-special-modules">বিশেষ মডিউল</div>
             <section class="four-col-grid" id="special_modules"><div class="empty-slot">ফায়ারবেস ডাটাবেজের অপেক্ষায়...</div></section>
             <div id="special_modules_more"></div>
         </div>
 
         <div class="section-block">
-            <div class="section-label">প্রমোশনাল ও ব্র্যান্ড সেবা</div>
+            <div class="section-label" id="label-unlimited-reviews">প্রমোশনাল ও ব্র্যান্ড সেবা</div>
             <section class="reviews-list" id="unlimited_reviews"><div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div></section>
         </div>
     </main>
@@ -538,6 +703,136 @@
         let currentUserState = null;
         let isModuleFullscreenActive = false;
 
+        // সেটিংস স্টেট (ডার্ক/লাইট মোড, ভাষা, প্রোফাইল নাম)
+        let currentTheme = localStorage.getItem('swadesh_theme') || 'light';
+        let currentLang = localStorage.getItem('swadesh_lang') || 'bn';
+        let savedProfileTitle = localStorage.getItem('swadesh_profile_title') || 'স্বদেশ সেবা';
+
+        const uiTexts = {
+            bn: {
+                logout: 'লগআউট',
+                back: 'ব্যাক',
+                homeStatus: 'হোম ড্যাশবোর্ড',
+                backToHomeMsg: 'আপনি হোম পেজে আছেন',
+                primaryServices: 'প্রধান সেবাসমূহ',
+                promoBanners: 'বিশেষ ঘোষণা ও ব্যানার',
+                specialModules: 'বিশেষ মডিউল',
+                unlimitedReviews: 'প্রমোশনাল ও ব্র্যান্ড সেবা',
+                settingsTitle: 'সেটিংস',
+                themeLabel: 'থিম মোড',
+                lightMode: 'লাইট মোড',
+                darkMode: 'ডার্ক মোড',
+                langLabel: 'ভাষা / Language',
+                profileLabel: 'প্রোফাইল সেটিংস (নাম / শিরোনাম)',
+                saveProfile: 'প্রোফাইল সেভ করুন',
+                profileSaved: 'প্রোফাইল সেটিংস সেভ হয়েছে'
+            },
+            en: {
+                logout: 'Logout',
+                back: 'Back',
+                homeStatus: 'Home Dashboard',
+                backToHomeMsg: 'You are on Home Page',
+                primaryServices: 'Primary Services',
+                promoBanners: 'Special Announcements & Banners',
+                specialModules: 'Special Modules',
+                unlimitedReviews: 'Promotional & Brand Services',
+                settingsTitle: 'Settings',
+                themeLabel: 'Theme Mode',
+                lightMode: 'Light Mode',
+                darkMode: 'Dark Mode',
+                langLabel: 'Language',
+                profileLabel: 'Profile Settings (Name / Title)',
+                saveProfile: 'Save Profile',
+                profileSaved: 'Profile settings saved'
+            }
+        };
+
+        window.setAppTheme = (mode) => {
+            currentTheme = mode === 'dark' ? 'dark' : 'light';
+            localStorage.setItem('swadesh_theme', currentTheme);
+            document.body.classList.toggle('dark-theme', currentTheme === 'dark');
+            const lightBtn = document.getElementById('btn-theme-light');
+            const darkBtn = document.getElementById('btn-theme-dark');
+            if (lightBtn) lightBtn.classList.toggle('active', currentTheme === 'light');
+            if (darkBtn) darkBtn.classList.toggle('active', currentTheme === 'dark');
+        };
+
+        window.setAppLanguage = (lang) => {
+            currentLang = lang === 'en' ? 'en' : 'bn';
+            localStorage.setItem('swadesh_lang', currentLang);
+            document.documentElement.lang = currentLang;
+
+            const bnBtn = document.getElementById('btn-lang-bn');
+            const enBtn = document.getElementById('btn-lang-en');
+            if (bnBtn) bnBtn.classList.toggle('active', currentLang === 'bn');
+            if (enBtn) enBtn.classList.toggle('active', currentLang === 'en');
+
+            const t = uiTexts[currentLang];
+            const logoutEl = document.getElementById('logout-btn-el');
+            const backTextEl = document.getElementById('back-btn-text');
+            const statusEl = document.getElementById('nav-history-status');
+            const pSec = document.getElementById('label-primary-services');
+            const bSec = document.getElementById('label-promo-banners');
+            const sSec = document.getElementById('label-special-modules');
+            const rSec = document.getElementById('label-unlimited-reviews');
+            const stTitle = document.getElementById('settings-box-title');
+            const thLbl = document.getElementById('theme-setting-label');
+            const lBtn = document.getElementById('btn-theme-light');
+            const dBtn = document.getElementById('btn-theme-dark');
+            const lgLbl = document.getElementById('lang-setting-label');
+            const prLbl = document.getElementById('profile-name-label');
+            const prSave = document.getElementById('profile-save-btn');
+
+            if (logoutEl) logoutEl.innerText = t.logout;
+            if (backTextEl) backTextEl.innerText = t.back;
+            if (statusEl && !isModuleFullscreenActive) statusEl.innerText = t.homeStatus;
+            if (pSec) pSec.innerText = t.primaryServices;
+            if (bSec) bSec.innerText = t.promoBanners;
+            if (sSec) sSec.innerText = t.specialModules;
+            if (rSec) rSec.innerText = t.unlimitedReviews;
+            if (stTitle) stTitle.innerText = t.settingsTitle;
+            if (thLbl) thLbl.innerText = t.themeLabel;
+            if (lBtn) lBtn.innerText = t.lightMode;
+            if (dBtn) dBtn.innerText = t.darkMode;
+            if (lgLbl) lgLbl.innerText = t.langLabel;
+            if (prLbl) prLbl.innerText = t.profileLabel;
+            if (prSave) prSave.innerText = t.saveProfile;
+        };
+
+        window.toggleSettingsGearPanel = (forceState) => {
+            const panel = document.getElementById('settings-gear-panel');
+            if (!panel) return;
+            const shouldOpen = typeof forceState === 'boolean' ? forceState : (panel.style.display !== 'block');
+            panel.style.display = shouldOpen ? 'block' : 'none';
+            const fb = document.getElementById('settings-feedback-msg');
+            if (fb) fb.innerText = '';
+            const input = document.getElementById('profile-name-input');
+            if (shouldOpen && input) {
+                input.value = savedProfileTitle;
+            }
+        };
+
+        window.saveProfileSettings = () => {
+            const input = document.getElementById('profile-name-input');
+            const fb = document.getElementById('settings-feedback-msg');
+            const nextTitle = (input && input.value.trim()) ? input.value.trim() : 'স্বদেশ সেবা';
+            savedProfileTitle = nextTitle;
+            localStorage.setItem('swadesh_profile_title', savedProfileTitle);
+            const profTitleEl = document.getElementById('prof-title');
+            if (profTitleEl) profTitleEl.innerText = savedProfileTitle;
+            if (fb) fb.innerText = uiTexts[currentLang].profileSaved;
+        };
+
+        function applySavedPreferences() {
+            window.setAppTheme(currentTheme);
+            window.setAppLanguage(currentLang);
+            const profTitleEl = document.getElementById('prof-title');
+            if (profTitleEl && savedProfileTitle) {
+                profTitleEl.innerText = savedProfileTitle;
+            }
+        }
+        window.addEventListener('DOMContentLoaded', applySavedPreferences);
+
         function setDashboardVisibility(showDashboard) {
             const mainScreen = document.getElementById('main-app-screen');
             const footer = document.getElementById('app-footer');
@@ -552,9 +847,19 @@
             }
         }
 
+        // হোম হিস্ট্রি এন্ট্রি পুশ করা যাতে ফোনের ব্যাক বাটনে অ্যাপ থেকে বের হয়ে না যায়
+        function ensureHomeHistoryState() {
+            try {
+                if (!window.history.state || !window.history.state.swadeshHomeGuard) {
+                    window.history.pushState({ swadeshHomeGuard: true }, '', window.location.href);
+                }
+            } catch (_) {}
+        }
+
         // মডিউলে ক্লিক করলে সরাসরি পুরো স্ক্রিনে শুধু সেই মডিউল ওপেন হবে; অ্যাপের ব্যাক বাটন কাজ করবে না
         window.openServiceStep = (title, url) => {
             if (!url || url === '#') return;
+            window.toggleSettingsGearPanel(false);
             const overlay = document.getElementById('fullscreen-module-overlay');
             const iframe = document.getElementById('fullscreen-module-iframe');
 
@@ -563,9 +868,10 @@
             overlay.style.display = 'block';
             iframe.src = url;
             window.scrollTo(0, 0);
+            ensureHomeHistoryState();
         };
 
-        // মডিউল থেকে বের হয়ে আসলে আবার সাধারণ ইন্টারফেস (ড্যাশবোর্ড) দেখাবে
+        // মডিউল থেকে বের হয়ে আসলে বা ব্যাক করলে আবার সাধারণ ইন্টারফেস (হোম পেজ) দেখাবে
         window.closeServiceViewer = () => {
             const overlay = document.getElementById('fullscreen-module-overlay');
             const iframe = document.getElementById('fullscreen-module-iframe');
@@ -574,8 +880,45 @@
             iframe.src = 'about:blank';
             overlay.style.display = 'none';
             setDashboardVisibility(true);
+            const statusEl = document.getElementById('nav-history-status');
+            if (statusEl) statusEl.innerText = uiTexts[currentLang].homeStatus;
             window.scrollTo(0, 0);
+            ensureHomeHistoryState();
         };
+
+        // ফোনের হার্ডওয়্যার / ব্রাউজার ব্যাক বাটন হ্যান্ডলিং: অ্যাপ থেকে বের না করে হোম পেজে নিয়ে আসবে
+        function handlePhoneBackAction() {
+            const gearPanel = document.getElementById('settings-gear-panel');
+            if (isModuleFullscreenActive) {
+                window.closeServiceViewer();
+                return true;
+            }
+            if (gearPanel && gearPanel.style.display === 'block') {
+                window.toggleSettingsGearPanel(false);
+                ensureHomeHistoryState();
+                return true;
+            }
+            const statusEl = document.getElementById('nav-history-status');
+            if (statusEl) statusEl.innerText = uiTexts[currentLang].backToHomeMsg;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            ensureHomeHistoryState();
+            return true;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            ensureHomeHistoryState();
+            try {
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App && typeof window.Capacitor.Plugins.App.addListener === 'function') {
+                    window.Capacitor.Plugins.App.addListener('backButton', () => {
+                        handlePhoneBackAction();
+                    });
+                }
+            } catch (_) {}
+        });
+
+        window.addEventListener('popstate', () => {
+            handlePhoneBackAction();
+        });
 
         // মডিউলের ভেতরের নিজস্ব ব্যাক বাটন বা লিংক থেকে ড্যাশবোর্ডে ফেরার সিগন্যাল গ্রহণ
         window.addEventListener('message', (event) => {
@@ -611,9 +954,14 @@
             if (isModuleFullscreenActive) {
                 return;
             }
-            if (window.history.length > 1) {
-                window.history.back();
+            const gearPanel = document.getElementById('settings-gear-panel');
+            if (gearPanel && gearPanel.style.display === 'block') {
+                window.toggleSettingsGearPanel(false);
+                return;
             }
+            const statusEl = document.getElementById('nav-history-status');
+            if (statusEl) statusEl.innerText = uiTexts[currentLang].backToHomeMsg;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         // নোটিফিকেশন পারমিশন প্রম্পটে অ্যাপ ক্র্যাশ/বন্ধ হওয়া প্রতিরোধে নিরাপদ হ্যান্ডলিং
