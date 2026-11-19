@@ -97,7 +97,10 @@ jobs:
       - name: Generate Android App Icons from logo.png
         run: |
           if [ -f "logo.png" ]; then
-            python3 - << 'EOF' || (pip install pillow && python3 - << 'PYEOF'
+            if ! python3 -c "import PIL" 2>/dev/null; then
+              pip install pillow
+            fi
+            cat << 'EOF' > generate_icons.py
           import os
           from PIL import Image
 
@@ -119,30 +122,9 @@ jobs:
               resized.save(os.path.join(out_dir, "ic_launcher.png"), "PNG")
               resized.save(os.path.join(out_dir, "ic_launcher_round.png"), "PNG")
               resized.save(os.path.join(out_dir, "ic_launcher_foreground.png"), "PNG")
+          print("App icons generated successfully.")
           EOF
-          )
-          import os
-          from PIL import Image
-
-          src = "logo.png"
-          res_root = "android/app/src/main/res"
-          sizes = {
-              "mipmap-mdpi": 48,
-              "mipmap-hdpi": 72,
-              "mipmap-xhdpi": 96,
-              "mipmap-xxhdpi": 144,
-              "mipmap-xxxhdpi": 192,
-          }
-
-          img = Image.open(src).convert("RGBA")
-          for folder, px in sizes.items():
-              out_dir = os.path.join(res_root, folder)
-              os.makedirs(out_dir, exist_ok=True)
-              resized = img.resize((px, px), Image.Resampling.LANCZOS)
-              resized.save(os.path.join(out_dir, "ic_launcher.png"), "PNG")
-              resized.save(os.path.join(out_dir, "ic_launcher_round.png"), "PNG")
-              resized.save(os.path.join(out_dir, "ic_launcher_foreground.png"), "PNG")
-          EOF
+            python3 generate_icons.py
           fi
 
       - name: Sync Capacitor Android
