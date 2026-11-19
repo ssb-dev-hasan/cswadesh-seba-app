@@ -8,15 +8,14 @@
     
     <style>
         :root {
-            --bg-blue-diamond-dark: #040b1d;
-            --bg-blue-diamond-mid: #0a1d47;
-            --bg-blue-diamond-light: #13347a;
-            --card-glass: rgba(16, 42, 99, 0.58);
-            --diamond-border: rgba(56, 189, 248, 0.35);
-            --diamond-glow: rgba(14, 165, 233, 0.45);
-            --accent-diamond: #38bdf8;
-            --text-primary: #ffffff;
-            --text-secondary: #bae6fd;
+            --bg-white: #ffffff;
+            --surface-light: #f8fafc;
+            --border-light: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --brand-primary: #0f172a;
+            --brand-accent: #0284c7;
+            --verified-blue: #1d9bf0;
         }
 
         * {
@@ -28,75 +27,57 @@
         }
 
         body {
-            background: linear-gradient(160deg, var(--bg-blue-diamond-light) 0%, var(--bg-blue-diamond-mid) 40%, var(--bg-blue-diamond-dark) 100%);
-            background-attachment: fixed;
-            color: var(--text-primary);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        .diamond-card {
-            background: var(--card-glass);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid var(--diamond-border);
-            border-radius: 16px;
-            box-shadow: 0 8px 28px rgba(2, 8, 23, 0.6), inset 0 0 14px rgba(56, 189, 248, 0.12);
+        .clean-surface {
+            background-color: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
         }
 
-        /* ১. স্প্ল্যাশ স্ক্রিন */
+        /* ১. স্প্ল্যাশ স্ক্রিন (শুধু নাম, নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম এবং স্বদেশ সেবা লোগো) */
         #splash-screen {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, #13347a 0%, #040b1d 85%);
+            background-color: var(--bg-white);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.45s ease;
         }
 
-        .splash-logo-box {
-            width: 96px;
-            height: 96px;
-            border-radius: 26px;
-            background: linear-gradient(135deg, #0284c7, #1e3a8a);
-            border: 2px solid var(--accent-diamond);
-            box-shadow: 0 0 35px var(--diamond-glow);
+        .swadesh-brand-logo {
+            width: 84px;
+            height: 84px;
+            border-radius: 22px;
+            background: #f1f5f9;
+            border: 1.5px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 46px;
-            margin-bottom: 16px;
-            animation: pulseDiamond 1.6s infinite ease-in-out;
+            margin-bottom: 14px;
         }
 
-        @keyframes pulseDiamond {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.06); }
+        .splash-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.2px;
         }
 
-        .splash-loader {
-            width: 140px;
-            height: 4px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 4px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .splash-loader-bar {
-            width: 100%;
-            height: 100%;
-            background: var(--accent-diamond);
-            animation: loadProgress 2.2s ease-in-out forwards;
-        }
-
-        @keyframes loadProgress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(0); }
+        .splash-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 600;
         }
 
         /* ২. ফায়ারবেস-কন্ট্রোলড লগইন ইন্টারফেস */
@@ -106,6 +87,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            background-color: var(--bg-white);
         }
 
         .auth-box {
@@ -120,56 +102,59 @@
         }
 
         .auth-logo-mini {
-            width: 58px;
-            height: 58px;
+            width: 54px;
+            height: 54px;
             margin: 0 auto 10px;
-            border-radius: 18px;
-            background: rgba(14, 165, 233, 0.2);
-            border: 1px solid var(--accent-diamond);
+            border-radius: 15px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
         }
 
         .auth-tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            background: rgba(4, 11, 29, 0.6);
+            background: #e2e8f0;
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 11px;
             margin-bottom: 18px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
         }
 
         .auth-tab-btn {
             padding: 8px;
             border: none;
             background: transparent;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 13px;
             font-weight: 600;
-            border-radius: 9px;
+            border-radius: 8px;
             cursor: pointer;
         }
 
         .auth-tab-btn.active {
-            background: linear-gradient(135deg, #0284c7, #2563eb);
-            color: #fff;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
 
         .input-group { margin-bottom: 13px; }
-        .input-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
 
-        .diamond-input {
+        .clean-input {
             width: 100%;
             padding: 11px 14px;
-            border-radius: 11px;
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            background: rgba(4, 11, 29, 0.65);
-            color: #fff;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: var(--bg-white);
+            color: var(--text-dark);
             font-size: 14px;
             outline: none;
+        }
+
+        .clean-input:focus {
+            border-color: var(--brand-accent);
         }
 
         .primary-submit-btn {
@@ -177,9 +162,9 @@
             padding: 12px;
             margin-top: 6px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #0284c7, #1d4ed8);
-            color: #fff;
+            border-radius: 11px;
+            background: var(--brand-primary);
+            color: #ffffff;
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
@@ -188,7 +173,7 @@
         .social-auth-divider {
             text-align: center;
             font-size: 11px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             margin: 14px 0;
             display: none;
         }
@@ -197,10 +182,10 @@
             width: 100%;
             padding: 11px;
             margin-bottom: 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            background: rgba(14, 165, 233, 0.15);
-            color: #fff;
+            border-radius: 11px;
+            border: 1px solid #cbd5e1;
+            background: var(--bg-white);
+            color: var(--text-dark);
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -211,7 +196,7 @@
         }
 
         .auth-error-msg {
-            color: #fda4af;
+            color: #dc2626;
             font-size: 12px;
             text-align: center;
             margin-top: 8px;
@@ -226,6 +211,7 @@
             max-width: 500px;
             margin: 0 auto;
             padding: 16px;
+            background-color: var(--bg-white);
         }
 
         .profile-header {
@@ -233,72 +219,173 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 16px;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, rgba(19, 52, 122, 0.85), rgba(6, 17, 43, 0.9));
+            margin-bottom: 10px;
         }
 
         .profile-info { display: flex; align-items: center; gap: 12px; }
         .profile-avatar {
             width: 46px; height: 46px; border-radius: 50%;
-            border: 2px solid var(--accent-diamond);
-            background: rgba(14, 165, 233, 0.2);
+            border: 1.5px solid #cbd5e1;
+            background: var(--bg-white);
             display: flex; align-items: center; justify-content: center; font-size: 20px;
         }
 
+        .profile-name-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .verified-badge {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 999px;
+        }
+
+        .verified-badge.active {
+            display: inline-flex;
+        }
+
         .logout-btn {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            padding: 7px 12px; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer;
+        }
+
+        /* প্রোফাইলের নিচে ব্যাক অ্যারো বার */
+        .profile-back-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin-bottom: 20px;
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 11px;
+        }
+
+        .step-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-white);
+            color: var(--text-dark);
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .step-back-btn:active {
+            background: #f1f5f9;
+        }
+
+        .nav-history-indicator {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* সার্ভিস ভিউয়ার প্যানেল (অ্যাপের ভেতরেই সার্ভিস খোলার জন্য যাতে বাইরে না যায়) */
+        #service-viewer-panel {
+            display: none;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            overflow: hidden;
+            background: var(--bg-white);
+        }
+
+        .service-viewer-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--surface-light);
+            border-bottom: 1px solid var(--border-light);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .service-iframe {
+            width: 100%;
+            height: 440px;
+            border: none;
+            display: block;
+            background: var(--bg-white);
         }
 
         .section-block { margin-bottom: 22px; }
         .section-label {
-            font-size: 14px; font-weight: 600; color: var(--text-secondary);
+            font-size: 14px; font-weight: 700; color: var(--text-dark);
             margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
         }
-        .section-label::before { content: "❖"; color: var(--accent-diamond); }
+        .section-label::before { content: "•"; color: var(--brand-accent); font-size: 18px; line-height: 1; }
 
+        /* কার্ডগুলোতে কোনো ডিফল্ট রঙ জোর করে দেওয়া হয়নি; পোস্টের bg_color অনুযায়ী রঙ বসবে */
         .four-col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
         .grid-card-item {
-            padding: 12px 4px; text-align: center; text-decoration: none; color: #fff;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative;
+            padding: 12px 4px; text-align: center; text-decoration: none;
+            border-radius: 14px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            position: relative; cursor: pointer;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
         }
         .card-icon-box {
             font-size: 21px; width: 40px; height: 40px;
-            background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3);
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.32);
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
         }
         .card-title-text { font-size: 11px; font-weight: 600; line-height: 1.25; }
         .mini-badge {
             position: absolute; top: 4px; right: 4px; font-size: 8px;
-            background: #0284c7; padding: 1px 4px; border-radius: 4px; font-weight: 700;
+            background: rgba(15, 23, 42, 0.55); color: #ffffff;
+            padding: 1px 4px; border-radius: 4px; font-weight: 700;
         }
         .more-toggle-btn {
             width: 100%; margin-top: 10px; padding: 9px;
-            background: rgba(14, 165, 233, 0.15); border: 1px dashed rgba(56, 189, 248, 0.45);
-            border-radius: 12px; color: var(--accent-diamond); font-size: 12px; font-weight: 600; cursor: pointer;
+            background: var(--surface-light); border: 1px dashed #94a3b8;
+            border-radius: 11px; color: var(--text-dark); font-size: 12px; font-weight: 600; cursor: pointer;
         }
 
         .banner-wrapper { display: flex; flex-direction: column; gap: 10px; }
         .banner-card {
-            padding: 18px; background: linear-gradient(135deg, #1d4ed8 0%, #0a1d47 100%);
-            text-decoration: none; color: #fff; display: block;
+            padding: 18px; text-decoration: none; display: block;
+            border-radius: 14px; cursor: pointer;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
         }
 
         .reviews-list { display: flex; flex-direction: column; gap: 12px; }
         .review-card { padding: 14px; }
         .empty-slot {
             grid-column: 1 / -1; padding: 16px; text-align: center;
-            border: 1px dashed rgba(56, 189, 248, 0.25); border-radius: 12px;
-            color: rgba(186, 230, 253, 0.5); font-size: 12px;
+            border: 1px dashed #cbd5e1; border-radius: 12px;
+            color: var(--text-muted); font-size: 12px;
+            background: var(--surface-light);
         }
 
         /* ৪. কপিরাইট ফুটার */
         .app-footer-copyright {
             text-align: center; padding: 16px 12px; font-size: 12px;
-            color: var(--text-secondary); border-top: 1px solid rgba(56, 189, 248, 0.15);
-            background: rgba(4, 11, 29, 0.5); margin-top: auto;
+            color: var(--text-muted); border-top: 1px solid var(--border-light);
+            background: var(--bg-white); margin-top: auto;
         }
     </style>
 </head>
@@ -306,19 +393,31 @@
 
     <!-- স্প্ল্যাশ স্ক্রিন -->
     <div id="splash-screen">
-        <div class="splash-logo-box">💎</div>
-        <div style="font-size: 26px; font-weight: 700;">স্বদেশ সেবা</div>
-        <div style="font-size: 12px; color: #bae6fd; margin-top: 4px;">নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম</div>
-        <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+        <div class="swadesh-brand-logo" aria-label="স্বদেশ সেবা লোগো">
+            <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="36" height="36" rx="10" fill="#0f172a"/>
+                <path d="M13 23.5L22 15L31 23.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 21V29.5H28V21" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="22" cy="25" r="2.2" fill="#ffffff"/>
+            </svg>
+        </div>
+        <div class="splash-title">স্বদেশ সেবা</div>
+        <div class="splash-subtitle">নিরাপদ ডিজিটাল সেবা প্ল্যাটফর্ম</div>
     </div>
 
     <!-- ফায়ারবেস-কন্ট্রোলড লগইন ও সাইন-আপ ইন্টারফেস -->
     <div id="auth-screen">
-        <div class="diamond-card auth-box">
+        <div class="clean-surface auth-box">
             <div class="auth-header">
-                <div class="auth-logo-mini">💎</div>
-                <h2 style="font-size: 20px; font-weight: 700;" id="auth-ui-title">স্বদেশ সেবা</h2>
-                <p style="font-size: 12px; color: var(--text-secondary);" id="auth-ui-sub">অ্যাকাউন্টে লগইন বা সাইন-আপ করুন</p>
+                <div class="auth-logo-mini">
+                    <svg width="30" height="30" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="36" height="36" rx="10" fill="#0f172a"/>
+                        <path d="M13 23.5L22 15L31 23.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 21V29.5H28V21" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 style="font-size: 20px; font-weight: 700; color: var(--text-dark);" id="auth-ui-title">স্বদেশ সেবা</h2>
+                <p style="font-size: 12px; color: var(--text-muted);" id="auth-ui-sub">অ্যাকাউন্টে লগইন বা সাইন-আপ করুন</p>
             </div>
 
             <div id="email-password-module">
@@ -330,11 +429,11 @@
                 <form onsubmit="submitAuthForm(event)">
                     <div class="input-group">
                         <label>ইমেইল ঠিকানা</label>
-                        <input type="email" id="auth-email" class="diamond-input" placeholder="example@mail.com" required>
+                        <input type="email" id="auth-email" class="clean-input" placeholder="example@mail.com" required>
                     </div>
                     <div class="input-group">
                         <label>পাসওয়ার্ড (ন্যূনতম ৬ অক্ষর)</label>
-                        <input type="password" id="auth-password" class="diamond-input" placeholder="••••••••" minlength="6" required>
+                        <input type="password" id="auth-password" class="clean-input" placeholder="••••••••" minlength="6" required>
                     </div>
                     <button type="submit" class="primary-submit-btn" id="auth-submit-btn">লগইন করুন</button>
                 </form>
@@ -355,16 +454,36 @@
 
     <!-- মেইন অ্যাপ ড্যাশবোর্ড -->
     <main id="main-app-screen">
-        <header class="diamond-card profile-header">
+        <header class="clean-surface profile-header">
             <div class="profile-info">
                 <div class="profile-avatar">👤</div>
                 <div>
-                    <div style="font-size: 16px; font-weight: 700;" id="prof-title">স্বদেশ সেবা</div>
-                    <div style="font-size: 11px; color: var(--text-secondary);" id="prof-email">user@email.com</div>
+                    <div class="profile-name-row">
+                        <span id="prof-title">স্বদেশ সেবা</span>
+                        <span class="verified-badge" id="email-verified-badge">✓ ভেরিফাইড</span>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-muted);" id="prof-email">user@email.com</div>
                 </div>
             </div>
             <button class="logout-btn" onclick="logoutUser()">লগআউট</button>
         </header>
+
+        <!-- প্রোফাইলের নিচে ব্যাক অ্যারো বাটন (ধাপে ধাপে ব্যাকে যাওয়ার জন্য, অ্যাপ থেকে বের না হয়ে) -->
+        <div class="profile-back-bar">
+            <button type="button" class="step-back-btn" id="step-back-btn" onclick="stepBackHistory()">
+                <span>←</span> ব্যাক
+            </button>
+            <span class="nav-history-indicator" id="nav-history-status">হোম ড্যাশবোর্ড</span>
+        </div>
+
+        <!-- সার্ভিস ভিউয়ার (যেকোনো সার্ভিস খোলার পর ধাপে ধাপে ব্যাকে ফেরার জন্য) -->
+        <div id="service-viewer-panel">
+            <div class="service-viewer-topbar">
+                <span id="active-service-title">সার্ভিস</span>
+                <button type="button" class="step-back-btn" onclick="closeServiceViewer()">← ড্যাশবোর্ডে ফিরুন</button>
+            </div>
+            <iframe id="service-iframe" class="service-iframe" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
 
         <div class="section-block">
             <div class="section-label">প্রধান সেবাসমূহ</div>
@@ -378,7 +497,7 @@
         </div>
 
         <div class="section-block">
-            <div class="section-label">বিশেষ মডিউল</div>
+            <div class="section-label">প্রমোশনাল ও ব্র্যান্ড সেবা</div>
             <section class="four-col-grid" id="special_modules"><div class="empty-slot">ফায়ারবেস ডাটাবেজের অপেক্ষায়...</div></section>
             <div id="special_modules_more"></div>
         </div>
@@ -399,18 +518,17 @@
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // এখানে আপনার ফায়ারবেস প্রজেক্টের আসল কনফিগারেশন বসাবেন
-    
-const firebaseConfig = {
-  apiKey: "AIzaSyAf7hn4_MIehUUUkg22tluO098ewn7I2Y0",
-  authDomain: "swadesh-seba.firebaseapp.com",
-  databaseURL: "https://swadesh-seba-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "swadesh-seba",
-  storageBucket: "swadesh-seba.firebasestorage.app",
-  messagingSenderId: "1088147149423",
-  appId: "1:1088147149423:web:81cfe70de08f2ea128f39a",
-  measurementId: "G-HG28GRWCSD"
-};
+        // ফায়ারবেস প্রজেক্ট কনফিগারেশন (অপরিবর্তিত)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf7hn4_MIehUUUkg22tluO098ewn7I2Y0",
+            authDomain: "swadesh-seba.firebaseapp.com",
+            databaseURL: "https://swadesh-seba-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "swadesh-seba",
+            storageBucket: "swadesh-seba.firebasestorage.app",
+            messagingSenderId: "1088147149423",
+            appId: "1:1088147149423:web:81cfe70de08f2ea128f39a",
+            measurementId: "G-HG28GRWCSD"
+        };
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
@@ -418,6 +536,69 @@ const firebaseConfig = {
         let authMode = 'login';
         let splashFinished = false;
         let currentUserState = null;
+
+        // ধাপে ধাপে নেভিগেশন হিস্ট্রি স্ট্যাক (অ্যাপ থেকে বের না হয়ে এক ধাপ করে পেছনে যাওয়ার জন্য)
+        const serviceHistoryStack = [];
+
+        function updateHistoryIndicator() {
+            const statusEl = document.getElementById('nav-history-status');
+            if (!statusEl) return;
+            if (serviceHistoryStack.length > 0) {
+                const current = serviceHistoryStack[serviceHistoryStack.length - 1];
+                statusEl.innerText = `সার্ভিস (${serviceHistoryStack.length} ধাপ): ${current.title}`;
+            } else {
+                statusEl.innerText = 'হোম ড্যাশবোর্ড';
+            }
+        }
+
+        window.openServiceStep = (title, url) => {
+            if (!url || url === '#') return;
+            serviceHistoryStack.push({ title: title || 'সার্ভিস', url });
+            const viewer = document.getElementById('service-viewer-panel');
+            const iframe = document.getElementById('service-iframe');
+            const titleEl = document.getElementById('active-service-title');
+
+            viewer.style.display = 'block';
+            titleEl.innerText = title || 'সার্ভিস';
+            iframe.src = url;
+            updateHistoryIndicator();
+            viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        window.closeServiceViewer = () => {
+            serviceHistoryStack.length = 0;
+            const viewer = document.getElementById('service-viewer-panel');
+            const iframe = document.getElementById('service-iframe');
+            iframe.src = 'about:blank';
+            viewer.style.display = 'none';
+            updateHistoryIndicator();
+        };
+
+        window.stepBackHistory = () => {
+            const iframe = document.getElementById('service-iframe');
+            const viewer = document.getElementById('service-viewer-panel');
+
+            // যদি সার্ভিস ভিউয়ার খোলা থাকে, তবে ধাপে ধাপে পেছনে যান; অ্যাপ থেকে বের হবেন না
+            if (viewer.style.display === 'block') {
+                if (serviceHistoryStack.length > 1) {
+                    serviceHistoryStack.pop();
+                    const prev = serviceHistoryStack[serviceHistoryStack.length - 1];
+                    document.getElementById('active-service-title').innerText = prev.title;
+                    iframe.src = prev.url;
+                    updateHistoryIndicator();
+                    return;
+                } else {
+                    window.closeServiceViewer();
+                    return;
+                }
+            }
+
+            // ড্যাশবোর্ডে থাকলে ব্রাউজার/অ্যাপ হিস্ট্রিতে এক ধাপ পেছনে যাবে (অ্যাপ বন্ধ করবে না)
+            if (window.history.length > 1) {
+                window.history.back();
+            }
+            updateHistoryIndicator();
+        };
 
         // পুশ নোটিফিকেশন ইঞ্জিন ইনিশিয়ালাইজেশন
         function initNativePushNotifications() {
@@ -445,21 +626,37 @@ const firebaseConfig = {
             setTimeout(() => {
                 splash.style.display = 'none';
                 routeScreen();
-            }, 500);
-        }, 2200);
+            }, 450);
+        }, 1800);
 
         function routeScreen() {
             if (!splashFinished) return;
             const authScreen = document.getElementById('auth-screen');
             const mainScreen = document.getElementById('main-app-screen');
+            const verifiedBadge = document.getElementById('email-verified-badge');
 
             if (currentUserState) {
                 authScreen.style.display = 'none';
                 mainScreen.style.display = 'block';
-                document.getElementById('prof-email').innerText = currentUserState.isAnonymous ? "অতিথি ব্যবহারকারী (Guest)" : currentUserState.email;
+
+                const isEmailProvider = !currentUserState.isAnonymous &&
+                    currentUserState.providerData &&
+                    currentUserState.providerData.some(p => p.providerId === 'password');
+
+                document.getElementById('prof-email').innerText = currentUserState.isAnonymous
+                    ? "অতিথি ব্যবহারকারী (Guest)"
+                    : (currentUserState.email || "");
+
+                // ইমেইল দিয়ে লগইন করলে প্রোফাইলে ভেরিফাইড টিক যুক্ত থাকবে
+                if (isEmailProvider) {
+                    verifiedBadge.classList.add('active');
+                } else {
+                    verifiedBadge.classList.remove('active');
+                }
             } else {
                 mainScreen.style.display = 'none';
                 authScreen.style.display = 'flex';
+                verifiedBadge.classList.remove('active');
             }
         }
 
@@ -533,7 +730,7 @@ const firebaseConfig = {
             routeScreen();
         });
 
-        // ৪ কলাম × ৩ লাইন + মোর বাটন ইঞ্জিন
+        // ৪ কলাম + মোর বাটন ইঞ্জিন (ডিফল্ট কালার ছাড়া, পোস্টের bg_color অনুযায়ী রঙ)
         const MAX_VISIBLE_CARDS = 12;
         const expandedState = { primary_services: false, special_modules: false };
         const cachedSectionData = { primary_services: [], special_modules: [] };
@@ -555,11 +752,15 @@ const firebaseConfig = {
             const visibleItems = isExpanded ? items : items.slice(0, MAX_VISIBLE_CARDS);
             visibleItems.forEach(item => {
                 const badgeHtml = (showBadge && item.badge) ? `<span class="mini-badge">${item.badge}</span>` : '';
+                const bgStyle = item.bg_color ? `background-color: ${item.bg_color}; color: ${item.text_color || '#ffffff'};` : `color: ${item.text_color || 'inherit'};`;
+                const safeTitle = (item.title || '').replace(/"/g, '&quot;');
+                const safeLink = (item.link || '#').replace(/"/g, '&quot;');
+
                 container.innerHTML += `
-                    <a href="${item.link || '#'}" class="diamond-card grid-card-item">
+                    <a href="${safeLink}" onclick="event.preventDefault(); openServiceStep('${safeTitle}', '${safeLink}');" class="grid-card-item" style="${bgStyle}">
                         ${badgeHtml}
-                        <div class="card-icon-box">${item.icon || '💠'}</div>
-                        <div class="card-title-text">${item.title}</div>
+                        <div class="card-icon-box">${item.icon || '📌'}</div>
+                        <div class="card-title-text">${item.title || ''}</div>
                     </a>`;
             });
 
@@ -589,10 +790,15 @@ const firebaseConfig = {
             if (!data) { container.innerHTML = `<div class="empty-slot">কোনো ব্যানার যুক্ত করা হয়নি</div>`; return; }
             container.innerHTML = '';
             Object.values(data).forEach(bnr => {
+                const bannerStyle = bnr.bg_color ? `background-color: ${bnr.bg_color}; color: ${bnr.text_color || '#ffffff'};` : `color: ${bnr.text_color || 'inherit'};`;
+                const safeTitle = (bnr.title || '').replace(/"/g, '&quot;');
+                const safeLink = (bnr.link || '#').replace(/"/g, '&quot;');
+                const descText = bnr.desc || bnr.subtitle || '';
+
                 container.innerHTML += `
-                    <a href="${bnr.link || '#'}" class="diamond-card banner-card">
-                        <div style="font-size:17px; font-weight:700; color:#7dd3fc; margin-bottom:4px;">${bnr.title}</div>
-                        <div style="font-size:13px; color:#e0f2fe;">${bnr.desc}</div>
+                    <a href="${safeLink}" onclick="event.preventDefault(); openServiceStep('${safeTitle}', '${safeLink}');" class="banner-card" style="${bannerStyle}">
+                        <div style="font-size:17px; font-weight:700; margin-bottom:4px;">${bnr.title || ''}</div>
+                        <div style="font-size:13px; opacity:0.92;">${descText}</div>
                     </a>`;
             });
         });
@@ -609,13 +815,14 @@ const firebaseConfig = {
             if (!data) { container.innerHTML = `<div class="empty-slot">এখনও কোনো রিভিউ যুক্ত হয়নি</div>`; return; }
             container.innerHTML = '';
             Object.values(data).reverse().forEach(rev => {
+                const reviewerName = rev.user || rev.name || 'ব্যবহারকারী';
                 container.innerHTML += `
-                    <div class="diamond-card review-card">
+                    <div class="clean-surface review-card">
                         <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:13px;">
-                            <span style="font-weight:700; color:var(--accent-diamond);">${rev.user} &nbsp; ${rev.rating || ''}</span>
-                            <span style="color:var(--text-secondary); font-size:11px;">${rev.date || ''}</span>
+                            <span style="font-weight:700; color:var(--text-dark);">${reviewerName} &nbsp; ${rev.rating || ''}</span>
+                            <span style="color:var(--text-muted); font-size:11px;">${rev.date || ''}</span>
                         </div>
-                        <div style="font-size:13px; color:#f1f5f9; line-height:1.5;">${rev.comment}</div>
+                        <div style="font-size:13px; color:var(--text-dark); line-height:1.5;">${rev.comment || ''}</div>
                     </div>`;
             });
         });
